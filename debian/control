@@ -1,0 +1,75 @@
+Source: ogslib
+Priority: optional
+Maintainer: Sukchan Lee <acetcom@gmail.com>
+Build-Depends: debhelper (>= 9),
+               dh-autoreconf,
+               autotools-dev,
+               autoconf,
+               automake,
+               libtool,
+               pkg-config
+Standards-Version: 3.9.8
+Section: libs
+Homepage: https://open5gs.org/
+Vcs-Git: https://github.com/open5gs/ogslib.git
+Vcs-Browser: https://github.com/open5gs/ogslib/tree/master
+
+Package: ogscore-1.0-0
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Description: OGSLib Core Library
+ OGSLib Core is a library containing various utility functions for things
+ such as memory-pool, socket, and event-loop.
+ .
+ This package contains the minimal runtime library for applications
+ that have been built with OGSLib.
+
+Package: ogscrypt-1.0-0
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Description: OGSLib Crypt Library
+ OGSLib Crypt is a library containing many cryptographic routines for things 
+ such as SHA1, SHA2, and AES.
+ .
+ This package contains the minimal runtime libraries for applications
+ that have been built with OGSLib.
+
+Package: ogslib
+Section: libs
+Architecture: any
+Multi-Arch: same
+Depends: ${misc:Depends},
+         ogscore-1.0-0 (= ${binary:Version}),
+         ogscrypt-1.0-0 (= ${binary:Version})
+Description: OGSLib - Open5GS Library (metapackage)
+ OGSLib provides various utility functions in an OS-independent manner.
+ It also includes functions used in cellular communication network programs.
+ .
+ This package contains the minimal runtime libraries for applications that
+ have been built with OGSLib.
+
+Package: ogslib-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends},
+         ogslib (= ${binary:Version})
+Description: Development headers for OGSLib - Open5GS Library
+ OGSLib provides a variety of utility functions in an OS-independent manner.
+ It also includes functions used in cellular communication network programs.
+ .
+ This package contains all the files necessary to develop applications
+ that use OGSLib.
+
+Package: ogslib-dbg
+Section: debug
+Architecture: any
+Depends: ${misc:Depends},
+         ogslib (= ${binary:Version})
+Description: Debug symbols for OGSLib - Open5GS Library
+ OGSLib provides various utility functions in an OS-independent manner.
+ It also includes functions used in cellular communication network programs.
+ .
+ This package contains debug symbols for all the libraries
+ that are part of OGSLib.

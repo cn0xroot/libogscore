@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Open5GS Core Library
+Description: C Utility Library
+Version: @VERSION@
+Libs: -L${libdir} @LIBS@ -logscore-@OGS_API_VERSION@
+Cflags: -I${includedir}/ogslib-@OGS_API_VERSION@

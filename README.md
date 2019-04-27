@@ -1,0 +1,66 @@
+## Installation with a Package Manager
+
+The OGSLib package is available on [OBS](https://build.opensuse.org/package/show/home:acetcom:open5gs:snapshot/ogslib). First, install the authentication key as shown below.
+```bash
+$ sudo apt install wget
+$ wget https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/Release.key
+$ sudo apt install gnupg
+$ sudo apt-key add Release.key
+```
+In Ubuntu 18.04(Bionic), you can install it as follows:
+```bash
+$ sudo sh -c "echo 'deb https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/ ./' > /etc/apt/sources.list.d/open5gs.list"
+$ sudo apt update
+$ sudo apt install ogslib
+```
+Other Linux distributions can be installed by changing the path.
+```
+https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Debian_9.0/
+https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Raspbian_9.0/
+https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_16.04/
+https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_17.10/
+https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/
+https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.10/
+```
+
+## Building OGSLib
+
+There is no dependencies for building the source code.
+
+Git clone as below:
+
+```
+$ git clone https://github.com/open5gs/ogslib
+```
+
+To compile with autotools:
+
+```bash
+$ autoreconf -iv
+$ ./configure --prefix=`pwd`/install
+$ make -j `nproc`
+```
+
+Check whether the installation is correct.
+```bash
+$ make check
+```
+
+## Support
+
+Problem with OGSLib can be filed as [issues](https://github.com/open5gs/ogslib/issues) in this repository. 
+
+## Contributing
+
+OGSLib is a pure/classic FOSS project, open to contributions from anyone.
+
+[Pull requests](https://github.com/open5gs/ogslib/pulls) are always welcome, and I appreciates any help the community can give to help make OGSLib better.
+
+Do you want to be a committer? Please [send me an email](mailto:acetcom@gmail.com). You will be added as a committer to this project. However, if someone consistently causes difficulties with these source repositories due to poor behavior or other serious problems then commit access may be revoked.
+
+## License
+
+OGSLib source files are made available under the terms of the GNU Affero General Public License (GNU AGPLv3).
+
+When you contribute code for OGSLib, the same license applies.
+

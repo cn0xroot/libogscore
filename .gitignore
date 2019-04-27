@@ -1,0 +1,39 @@
+# compiler output
+*.o
+*.lo
+*.la
+*.pc
+*.conf
+.deps
+.dirstamp
+.libs
+
+# autotools
+stamp-h1
+ogs-config.h*
+config.log
+config.status
+configure
+aclocal.m4
+libtool
+autom4te.cache
+build/*
+!build/git-version-gen
+!build/osc-upload.sh
+Makefile
+Makefile.in
+m4/*.m4
+!m4/ax_*.m4
+
+.tarball-version
+.version
+
+# autotest
+tests/atconfig
+tests/test-suite.log
+tests/*/test*.log
+tests/*/test*.trs
+
+# executables
+tests/core/testcore
+tests/crypt/testcrypt
