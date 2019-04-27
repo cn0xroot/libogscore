@@ -41,7 +41,7 @@ $ ./configure --prefix=`pwd`/install
 $ make -j `nproc`
 ```
 
-Check whether the installation is correct.
+Check whether the compilation is correct.
 ```bash
 $ make check
 ```
