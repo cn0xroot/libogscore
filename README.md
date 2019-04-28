@@ -2,16 +2,16 @@
 
 The OGSLib package is available on [OBS](https://build.opensuse.org/package/show/home:acetcom:open5gs:snapshot/ogslib). First, install the authentication key as shown below.
 ```bash
-$ sudo apt install wget
+$ sudo apt update
+$ sudo apt install wget gnupg
 $ wget https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/Release.key
-$ sudo apt install gnupg
 $ sudo apt-key add Release.key
 ```
 In Ubuntu 18.04(Bionic), you can install it as follows:
 ```bash
 $ sudo sh -c "echo 'deb https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/ ./' > /etc/apt/sources.list.d/open5gs.list"
 $ sudo apt update
-$ sudo apt install ogslib
+$ sudo apt install ogslib-dev
 ```
 Other Linux distributions can be installed by changing the path.
 ```
@@ -36,6 +36,7 @@ $ git clone https://github.com/open5gs/ogslib
 To compile with autotools:
 
 ```bash
+$ cd ogslib
 $ autoreconf -iv
 $ ./configure --prefix=`pwd`/install
 $ make -j `nproc`
