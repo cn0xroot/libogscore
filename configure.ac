@@ -32,7 +32,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_TESTDIR(tests)
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE([1.14 foreign subdir-objects])
+AM_INIT_AUTOMAKE([1.13 foreign subdir-objects])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_CONFIG_HEADER([src/ogs-config.h])
 
