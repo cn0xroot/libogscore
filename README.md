@@ -14,7 +14,7 @@ The OGSLib package is also available on [OBS](https://build.opensuse.org/package
 ```bash
 $ sudo apt update
 $ sudo apt install wget gnupg
-$ wget https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/Release.key
+$ wget https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Debian_9.0/Release.key
 $ sudo apt-key add Release.key
 ```
 
