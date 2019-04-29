@@ -1,19 +1,33 @@
 ## Installation with a Package Manager
 
-The OGSLib package is available on [OBS](https://build.opensuse.org/package/show/home:acetcom:open5gs:snapshot/ogslib). First, install the authentication key as shown below.
+The OGSLib package is available on the recent versions of *Ubuntu*.
+```bash
+$ sudo apt update
+$ sudo apt install software-properties-common
+$ sudo add-apt-repository ppa:open5gs/latest
+$ sudo apt update
+$ sudo apt install ogslib-dev
+```
+
+The OGSLib package is also available on [OBS](https://build.opensuse.org/package/show/home:acetcom:open5gs:snapshot/ogslib). First, install the authentication key as shown below.
+
 ```bash
 $ sudo apt update
 $ sudo apt install wget gnupg
 $ wget https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/Release.key
 $ sudo apt-key add Release.key
 ```
-In Ubuntu 18.04(Bionic), you can install it as follows:
+
+In Debian 9.0(stretch), you can install it as follows:
+
 ```bash
-$ sudo sh -c "echo 'deb https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/ ./' > /etc/apt/sources.list.d/open5gs.list"
+$ sudo sh -c "echo 'deb https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Debian_9.0/ ./' > /etc/apt/sources.list.d/open5gs.list"
 $ sudo apt update
 $ sudo apt install ogslib-dev
 ```
+
 Other Linux distributions can be installed by changing the path.
+
 ```
 https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Debian_9.0/
 https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Raspbian_9.0/
