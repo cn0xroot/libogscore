@@ -37,6 +37,13 @@ https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbunt
 https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.10/
 ```
 
+[Martin Hauke](https://build.opensuse.org/user/show/mnhauke) packaged NextEPC for *openSUSE* on [OBS](https://build.opensuse.org/package/show/home:mnhauke:nextepc/ogslib).
+
+```bash
+$ sudo zypper addrepo -f obs://home:mnhauke:nextepc home:mnhauke:nextepc
+$ sudo zypper install ogslib
+```
+
 ## Building OGSLib
 
 There is no dependencies for building the source code.
