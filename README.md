@@ -14,7 +14,7 @@ The OGSLib package is also available on [OBS](https://build.opensuse.org/package
 ```bash
 $ sudo apt update
 $ sudo apt install wget gnupg
-$ wget https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Debian_9.0/Release.key
+$ wget http://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Debian_9.0/Release.key
 $ sudo apt-key add Release.key
 ```
 
@@ -29,12 +29,12 @@ $ sudo apt install ogslib-dev
 Other Linux distributions can be installed by changing the path.
 
 ```
-https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Debian_9.0/
-https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Raspbian_9.0/
-https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_16.04/
-https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_17.10/
-https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/
-https://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.10/
+http://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Debian_9.0/
+http://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/Raspbian_9.0/
+http://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_16.04/
+http://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_17.10/
+http://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.04/
+http://download.opensuse.org/repositories/home:/acetcom:/open5gs:/latest/xUbuntu_18.10/
 ```
 
 [Martin Hauke](https://build.opensuse.org/user/show/mnhauke) packaged NextEPC for *openSUSE* on [OBS](https://build.opensuse.org/package/show/home:mnhauke:nextepc/ogslib).
