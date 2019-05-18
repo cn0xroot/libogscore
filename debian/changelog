@@ -1,14 +1,8 @@
-ogslib (1.0.0-5~ubuntu1) xenial; urgency=medium
+ogslib (1.0.1) unstable; urgency=medium
 
-  * Initial release.
+  * Minor Fixed
 
- -- Sukchan Lee <acetcom@gmail.com>  Tue, 30 Apr 2019 15:16:51 +0000
-
-ogslib (1.0.0-5~ubuntu) bionic; urgency=medium
-
-  * Initial release.
-
- -- Sukchan Lee <acetcom@gmail.com>  Mon, 29 Apr 2019 14:14:55 +0000
+ -- Sukchan Lee <acetcom@gmail.com>  Sat, 18 May 2019 08:15:45 +0000
 
 ogslib (1.0.0) unstable; urgency=medium
 
