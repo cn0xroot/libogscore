@@ -33,13 +33,12 @@ typedef struct ogs_socknode_s {
     ogs_lnode_t node;
 
     ogs_sock_t *sock;
-    ogs_sockaddr_t *list;
+    ogs_sockaddr_t *addr;
     ogs_poll_t *poll;
 } ogs_socknode_t;
 
-int ogs_sock_add_node(ogs_list_t *list,
-        ogs_socknode_t **node, ogs_sockaddr_t *sa_list, int family);
-void ogs_sock_remove_node(ogs_list_t *list, ogs_socknode_t *node);
+ogs_socknode_t *ogs_sock_add_node(
+        ogs_list_t *list, int family, ogs_sockaddr_t *sa_list);
 void ogs_sock_remove_all_nodes(ogs_list_t *list);
 
 void ogs_sock_shutdown_all_nodes(ogs_list_t *list);

@@ -385,8 +385,8 @@ static void test7_func(abts_case *tc, void *data)
     rv = ogs_getaddrinfo(&addr, AF_UNSPEC, "localhost", PORT, 0);
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
-    rv = ogs_sock_add_node(&list, &node, addr, AF_INET);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
+    node = ogs_sock_add_node(&list, AF_INET, addr);
+    ABTS_PTR_NOTNULL(tc, node);
 
     ogs_freeaddrinfo(addr);
 

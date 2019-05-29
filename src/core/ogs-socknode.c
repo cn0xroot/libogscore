@@ -22,31 +22,31 @@
 #undef OGS_LOG_DOMAIN
 #define OGS_LOG_DOMAIN __ogs_sock_domain
 
-int ogs_sock_add_node(ogs_list_t *list,
-        ogs_socknode_t **node, ogs_sockaddr_t *sa_list, int family)
+ogs_socknode_t *ogs_sock_add_node(
+        ogs_list_t *list, int family, ogs_sockaddr_t *sa_list)
 {
     int rv;
-    ogs_sockaddr_t *new_list = NULL;
+    ogs_sockaddr_t *newaddr = NULL;
+    ogs_socknode_t *node = NULL;
 
     ogs_assert(list);
-    ogs_assert(node);
     ogs_assert(sa_list);
 
-    rv = ogs_copyaddrinfo(&new_list, sa_list);
+    rv = ogs_copyaddrinfo(&newaddr, sa_list);
     ogs_assert(rv == OGS_OK);
 
     if (family != AF_UNSPEC) {
-        rv = ogs_filteraddrinfo(&new_list, family);
+        rv = ogs_filteraddrinfo(&newaddr, family);
         ogs_assert(rv == OGS_OK);
     }
 
-    if (new_list) {
-        *node = ogs_calloc(1, sizeof(ogs_socknode_t));
-        (*node)->list = new_list;
-        ogs_list_add(list, *node);
+    if (newaddr) {
+        node = ogs_calloc(1, sizeof(ogs_socknode_t));
+        node->addr = newaddr;
+        ogs_list_add(list, node);
     }
 
-    return OGS_OK;
+    return node;
 }
 
 void ogs_sock_remove_node(ogs_list_t *list, ogs_socknode_t *node)
@@ -55,7 +55,7 @@ void ogs_sock_remove_node(ogs_list_t *list, ogs_socknode_t *node)
 
     ogs_list_remove(list, node);
 
-    ogs_freeaddrinfo(node->list);
+    ogs_freeaddrinfo(node->addr);
     ogs_free(node);
 }
 
@@ -136,14 +136,11 @@ int ogs_sock_probe_node(
             continue;
 
         addr = ogs_calloc(1, sizeof(ogs_sockaddr_t));
-        ogs_assert(addr);
         memcpy(&addr->sa, cur->ifa_addr, ogs_sockaddr_len(cur->ifa_addr));
         addr->c_sa_port = htons(port);
 
         node = ogs_calloc(1, sizeof(ogs_socknode_t));
-        ogs_assert(node);
-
-        node->list = addr;
+        node->addr = addr;
 
         if (addr->c_sa_family == AF_INET) {
             ogs_assert(list);
