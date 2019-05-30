@@ -33,31 +33,26 @@ static void test1_func(abts_case *tc, void *data)
 {
     ogs_sock_t *udp;
     ogs_sockaddr_t *addr;
+    ogs_socknode_t *node;
     int rv;
 
-    rv = ogs_getaddrinfo(&addr, AF_UNSPEC, NULL, PORT, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    udp = ogs_udp_server(addr);
+    node = ogs_socknode_new(AF_UNSPEC, NULL, PORT, AI_PASSIVE);
+    ABTS_PTR_NOTNULL(tc, node);
+    udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    ogs_sock_destroy(udp);
+    ogs_socknode_free(node);
 
-    rv = ogs_getaddrinfo(&addr, AF_UNSPEC, "127.0.0.1", PORT, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    udp = ogs_udp_server(addr);
+    node = ogs_socknode_new(AF_UNSPEC, "127.0.0.1", PORT, AI_PASSIVE);
+    ABTS_PTR_NOTNULL(tc, node);
+    udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    ogs_sock_destroy(udp);
+    ogs_socknode_free(node);
 
-    rv = ogs_getaddrinfo(&addr, AF_UNSPEC, "::1", PORT, AI_PASSIVE);
+    node = ogs_socknode_new(AF_UNSPEC, "::1", PORT, AI_PASSIVE);
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    udp = ogs_udp_server(addr);
+    udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    ogs_sock_destroy(udp);
+    ogs_socknode_free(node);
 }
 
 static ogs_thread_t *test2_thread;
@@ -118,25 +113,26 @@ static void test3_main(void *data)
     abts_case *tc = data;
     int rv;
     ogs_sock_t *udp;
-    ogs_sockaddr_t *sa;
+    ogs_sockaddr_t *addr;
+    ogs_socknode_t *node;
     char str[STRLEN];
     ssize_t size;
     int rc;
     char buf[OGS_ADDRSTRLEN];
 
-    udp = ogs_udp_socket(AF_INET);
+    rv = ogs_getaddrinfo(&addr, AF_INET, NULL, PORT, 0);
+    ABTS_INT_EQUAL(tc, OGS_OK, rv);
+
+    udp = ogs_udp_socket(AF_INET, NULL);
     ABTS_PTR_NOTNULL(tc, udp);
 
-    rv = ogs_getaddrinfo(&sa, AF_INET, NULL, PORT, 0);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-
-    size = ogs_sendto(udp->fd, DATASTR, strlen(DATASTR), 0, sa);
+    size = ogs_sendto(udp->fd, DATASTR, strlen(DATASTR), 0, addr);
     ABTS_INT_EQUAL(tc, strlen(DATASTR), size);
 
-    rv = ogs_freeaddrinfo(sa);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-
     ogs_sock_destroy(udp);
+
+    rv = ogs_freeaddrinfo(addr);
+    ABTS_INT_EQUAL(tc, OGS_OK, rv);
 }
 
 static void test3_func(abts_case *tc, void *data)
@@ -144,17 +140,16 @@ static void test3_func(abts_case *tc, void *data)
     ogs_sock_t *udp;
     int rv;
     ssize_t size;
-    ogs_sockaddr_t sa, *addr;
+    ogs_sockaddr_t sa;
+    ogs_socknode_t *node;
     socklen_t addrlen;
     char str[STRLEN];
     char buf[OGS_ADDRSTRLEN];
 
-    rv = ogs_getaddrinfo(&addr, AF_INET, NULL, PORT, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    udp = ogs_udp_server(addr);
+    node = ogs_socknode_new(AF_INET, NULL, PORT, AI_PASSIVE);
+    ABTS_PTR_NOTNULL(tc, node);
+    udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
     test3_thread = ogs_thread_create(test3_main, tc);
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
@@ -165,7 +160,7 @@ static void test3_func(abts_case *tc, void *data)
 
     ogs_thread_destroy(test3_thread);
 
-    ogs_sock_destroy(udp);
+    ogs_socknode_free(node);
 }
 
 static ogs_thread_t *test4_thread;
@@ -174,16 +169,14 @@ static void test4_main(void *data)
     abts_case *tc = data;
     int rv;
     ogs_sock_t *udp;
-    ogs_sockaddr_t *addr;
+    ogs_socknode_t *node;
     char str[STRLEN];
     ssize_t size;
 
-    rv = ogs_getaddrinfo(&addr, AF_INET, NULL, PORT, 0);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    udp = ogs_udp_client(addr);
+    node = ogs_socknode_new(AF_INET, NULL, PORT, 0);
+    ABTS_PTR_NOTNULL(tc, node);
+    udp = ogs_udp_client(node);
     ABTS_PTR_NOTNULL(tc, udp);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
     size = ogs_send(udp->fd, DATASTR, strlen(DATASTR), 0);
     ABTS_INT_EQUAL(tc, strlen(DATASTR), size);
@@ -191,7 +184,7 @@ static void test4_main(void *data)
     size = ogs_recv(udp->fd, str, STRLEN, 0);
     ABTS_INT_EQUAL(tc, strlen(DATASTR), size);
 
-    ogs_sock_destroy(udp);
+    ogs_socknode_free(node);
 }
 
 static void test4_func(abts_case *tc, void *data)
@@ -199,17 +192,16 @@ static void test4_func(abts_case *tc, void *data)
     ogs_sock_t *udp;
     int rv;
     ssize_t size;
-    ogs_sockaddr_t sa, *addr;
+    ogs_sockaddr_t sa;
+    ogs_socknode_t *node;
     socklen_t addrlen;
     char str[STRLEN];
     char buf[OGS_ADDRSTRLEN];
 
-    rv = ogs_getaddrinfo(&addr, AF_INET, NULL, PORT, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    udp = ogs_udp_server(addr);
+    node = ogs_socknode_new(AF_INET, NULL, PORT, AI_PASSIVE);
+    ABTS_PTR_NOTNULL(tc, node);
+    udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
     test4_thread = ogs_thread_create(test4_main, tc);
     ABTS_PTR_NOTNULL(tc, test4_thread);
@@ -223,7 +215,7 @@ static void test4_func(abts_case *tc, void *data)
 
     ogs_thread_destroy(test4_thread);
 
-    ogs_sock_destroy(udp);
+    ogs_socknode_free(node);
 }
 
 static ogs_thread_t *test5_thread;
@@ -233,15 +225,14 @@ static void test5_main(void *data)
     int rv;
     ogs_sock_t *udp;
     ogs_sockaddr_t *addr;
+    ogs_socknode_t *node;
     char str[STRLEN];
     ssize_t size;
 
-    rv = ogs_getaddrinfo(&addr, AF_INET6, NULL, PORT2, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    udp = ogs_udp_server(addr);
+    node = ogs_socknode_new(AF_INET6, NULL, PORT2, AI_PASSIVE);
+    ABTS_PTR_NOTNULL(tc, node);
+    udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
     rv = ogs_getaddrinfo(&addr, AF_INET6, NULL, PORT, 0);
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
@@ -256,7 +247,7 @@ static void test5_main(void *data)
     size = ogs_recv(udp->fd, str, STRLEN, 0);
     ABTS_INT_EQUAL(tc, strlen(DATASTR), size);
 
-    ogs_sock_destroy(udp);
+    ogs_socknode_free(node);
 }
 
 static void test5_func(abts_case *tc, void *data)
@@ -265,16 +256,15 @@ static void test5_func(abts_case *tc, void *data)
     int rv;
     ssize_t size;
     ogs_sockaddr_t sa, *addr;
+    ogs_socknode_t *node;
     socklen_t addrlen;
     char str[STRLEN];
     char buf[OGS_ADDRSTRLEN];
 
-    rv = ogs_getaddrinfo(&addr, AF_INET6, NULL, PORT, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    udp = ogs_udp_server(addr);
+    node = ogs_socknode_new(AF_INET6, NULL, PORT, AI_PASSIVE);
+    ABTS_PTR_NOTNULL(tc, node);
+    udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
     rv = ogs_getaddrinfo(&addr, AF_INET6, NULL, PORT2, 0);
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
@@ -295,7 +285,7 @@ static void test5_func(abts_case *tc, void *data)
 
     ogs_thread_destroy(test5_thread);
 
-    ogs_sock_destroy(udp);
+    ogs_socknode_free(node);
 }
 
 static void test6_func(abts_case *tc, void *data)

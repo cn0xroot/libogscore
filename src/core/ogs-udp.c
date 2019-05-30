@@ -22,30 +22,30 @@
 #undef OGS_LOG_DOMAIN
 #define OGS_LOG_DOMAIN __ogs_sock_domain
 
-ogs_sock_t *ogs_udp_socket(int family)
+ogs_sock_t *ogs_udp_socket(int family, ogs_socknode_t *node)
 {
-    ogs_sock_t *new = NULL;
+    ogs_sock_t *sock = NULL;
+    sock = ogs_sock_socket(family, SOCK_DGRAM, IPPROTO_UDP);
+    ogs_assert(sock);
 
-    new = ogs_sock_socket(family, SOCK_DGRAM, IPPROTO_UDP);
-    ogs_assert(new);
+    ogs_debug("udp_socket() family:%d", family);
 
-    ogs_debug("udp socket(%d)", family);
-
-    return new;
+    return sock;
 }
 
-ogs_sock_t *ogs_udp_server(ogs_sockaddr_t *sa_list)
+ogs_sock_t *ogs_udp_server(ogs_socknode_t *node)
 {
     int rv;
     ogs_sock_t *new = NULL;
     ogs_sockaddr_t *addr;
     char buf[OGS_ADDRSTRLEN];
 
-    ogs_assert(sa_list);
+    ogs_assert(node);
+    ogs_assert(node->addr);
 
-    addr = sa_list;
+    addr = node->addr;
     while (addr) {
-        new = ogs_udp_socket(addr->ogs_sa_family);
+        new = ogs_udp_socket(addr->ogs_sa_family, node);
         if (new) {
             rv = ogs_listen_reusable(new->fd);
             ogs_assert(rv == OGS_OK);
@@ -65,24 +65,27 @@ ogs_sock_t *ogs_udp_server(ogs_sockaddr_t *sa_list)
     if (addr == NULL) {
         ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
                 "udp_server() [%s]:%d failed",
-                OGS_ADDR(sa_list, buf), OGS_PORT(sa_list));
+                OGS_ADDR(node->addr, buf), OGS_PORT(node->addr));
         return NULL;
     }
+
+    node->sock = new;
 
     return new;
 }
 
-ogs_sock_t *ogs_udp_client(ogs_sockaddr_t *sa_list)
+ogs_sock_t *ogs_udp_client(ogs_socknode_t *node)
 {
     ogs_sock_t *new = NULL;
     ogs_sockaddr_t *addr;
     char buf[OGS_ADDRSTRLEN];
 
-    ogs_assert(sa_list);
+    ogs_assert(node);
+    ogs_assert(node->addr);
 
-    addr = sa_list;
+    addr = node->addr;
     while (addr) {
-        new = ogs_udp_socket(addr->ogs_sa_family);
+        new = ogs_udp_socket(addr->ogs_sa_family, node);
         if (new) {
             if (ogs_sock_connect(new, addr) == OGS_OK) {
                 ogs_debug("udp_client() [%s]:%d",
@@ -99,9 +102,11 @@ ogs_sock_t *ogs_udp_client(ogs_sockaddr_t *sa_list)
     if (addr == NULL) {
         ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
                 "udp_client() [%s]:%d failed",
-                OGS_ADDR(sa_list, buf), OGS_PORT(sa_list));
+                OGS_ADDR(node->addr, buf), OGS_PORT(node->addr));
         return NULL;;
     }
+
+    node->sock = new;
 
     return new;
 }

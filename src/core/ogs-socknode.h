@@ -46,8 +46,6 @@ ogs_socknode_t *ogs_socknode_add(
 void ogs_socknode_remove(ogs_list_t *list, ogs_socknode_t *node);
 void ogs_socknode_remove_all(ogs_list_t *list);
 
-void ogs_socknode_shutdown_all(ogs_list_t *list);
-
 int ogs_socknode_probe(
         ogs_list_t *list, ogs_list_t *list6, const char *dev, uint16_t port);
 int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list);

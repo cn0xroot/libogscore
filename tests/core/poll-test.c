@@ -47,28 +47,28 @@ static void test1_func(abts_case *tc, void *data)
     int i;
     ssize_t size;
     ogs_poll_t *poll[NUM];
-    ogs_sock_t *server[NUM], *client[NUM];
     ogs_sockaddr_t *addr;
+    ogs_socknode_t *server[NUM], *client[NUM];
     ogs_pollset_t *pollset = ogs_pollset_create();
     ABTS_PTR_NOTNULL(tc, pollset);
 
     for (i = 0; i < NUM; i++) {
-        rv = ogs_getaddrinfo(&addr, AF_INET, "127.0.0.1", PORT+i, AI_PASSIVE);
-        ABTS_INT_EQUAL(tc, OGS_OK, rv);
-        server[i] = ogs_udp_server(addr);
-        ABTS_PTR_NOTNULL(tc, server);
-        client[i] = ogs_udp_client(addr);
-        ABTS_PTR_NOTNULL(tc, client);
-        rv = ogs_freeaddrinfo(addr);
-        ABTS_INT_EQUAL(tc, OGS_OK, rv);
+        server[i] = ogs_socknode_new(AF_INET, "127.0.0.1", PORT+i, AI_PASSIVE);
+        ABTS_PTR_NOTNULL(tc, server[i]);
+        ogs_udp_server(server[i]);
+        ABTS_PTR_NOTNULL(tc, server[i]->sock);
+        client[i] = ogs_socknode_new(AF_INET, "127.0.0.1", PORT+i, AI_PASSIVE);
+        ABTS_PTR_NOTNULL(tc, client[i]);
+        ogs_udp_client(client[i]);
+        ABTS_PTR_NOTNULL(tc, client[i]->sock);
     }
 
     for (i = 0; i < NUM; i+=2) {
         poll[i] = ogs_pollset_add(pollset, OGS_POLLIN,
-                server[i]->fd, test1_handler, tc);
+                server[i]->sock->fd, test1_handler, tc);
         ABTS_PTR_NOTNULL(tc, poll);
 
-        size = ogs_send(client[i]->fd, DATASTR, strlen(DATASTR), 0);
+        size = ogs_send(client[i]->sock->fd, DATASTR, strlen(DATASTR), 0);
         ABTS_INT_EQUAL(tc, strlen(DATASTR), size);
     }
 
@@ -79,12 +79,12 @@ static void test1_func(abts_case *tc, void *data)
 
     for (i = 1; i < NUM; i+=2) {
         poll[i] = ogs_pollset_add(pollset, OGS_POLLIN,
-                server[i]->fd, test1_handler, tc);
+                server[i]->sock->fd, test1_handler, tc);
         ABTS_PTR_NOTNULL(tc, poll);
     }
 
     for (i = 0; i < NUM; i++) {
-        size = ogs_send(client[i]->fd, DATASTR, strlen(DATASTR), 0);
+        size = ogs_send(client[i]->sock->fd, DATASTR, strlen(DATASTR), 0);
         ABTS_INT_EQUAL(tc, strlen(DATASTR), size);
     }
 
@@ -98,7 +98,7 @@ static void test1_func(abts_case *tc, void *data)
     }
 
     for (i = 1; i < NUM; i+=2) {
-        size = ogs_send(client[i]->fd, DATASTR, strlen(DATASTR), 0);
+        size = ogs_send(client[i]->sock->fd, DATASTR, strlen(DATASTR), 0);
         ABTS_INT_EQUAL(tc, strlen(DATASTR), size);
     }
 
@@ -115,8 +115,8 @@ static void test1_func(abts_case *tc, void *data)
     ABTS_INT_EQUAL(tc, OGS_TIMEUP, rv);
 
     for (i = 0; i < NUM; i++) {
-        ogs_sock_destroy(client[i]);
-        ogs_sock_destroy(server[i]);
+        ogs_socknode_free(client[i]);
+        ogs_socknode_free(server[i]);
     }
 
     ogs_pollset_destroy(pollset);
@@ -242,7 +242,7 @@ static void test4_main(void *data)
     int rc;
     char buf[OGS_ADDRSTRLEN];
 
-    udp = ogs_udp_socket(AF_INET);
+    udp = ogs_udp_socket(AF_INET, NULL);
     ABTS_PTR_NOTNULL(tc, udp);
 
     rv = ogs_getaddrinfo(&sa, AF_INET, NULL, PORT, 0);
@@ -278,15 +278,14 @@ static void test4_func(abts_case *tc, void *data)
     ogs_poll_t *poll;
     ogs_sock_t *udp;
     ogs_sockaddr_t *addr;
+    ogs_socknode_t *node;
     ogs_pollset_t *pollset = ogs_pollset_create();
     ABTS_PTR_NOTNULL(tc, pollset);
 
-    rv = ogs_getaddrinfo(&addr, AF_INET, NULL, PORT, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    udp = ogs_udp_server(addr);
+    node = ogs_socknode_new(AF_INET, NULL, PORT, AI_PASSIVE);
+    ABTS_PTR_NOTNULL(tc, node);
+    udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
     poll = ogs_pollset_add(pollset, OGS_POLLIN, udp->fd, test4_handler, tc);
     ABTS_PTR_NOTNULL(tc, poll);
@@ -301,7 +300,7 @@ static void test4_func(abts_case *tc, void *data)
 
     ogs_pollset_remove(poll);
 
-    ogs_sock_destroy(udp);
+    ogs_socknode_free(node);
 
     ogs_pollset_destroy(pollset);
 }
@@ -439,6 +438,7 @@ abts_suite *test_poll(abts_suite *suite)
 #if 0 /* FIXME : Not working in WIN32, i585 */
     abts_run_test(suite, test1_func, NULL);
 #endif
+
     abts_run_test(suite, test2_func, NULL);
     abts_run_test(suite, test3_func, NULL);
     abts_run_test(suite, test4_func, NULL);

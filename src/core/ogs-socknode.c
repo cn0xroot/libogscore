@@ -29,7 +29,10 @@ ogs_socknode_t *ogs_socknode_new(
     ogs_socknode_t *node = NULL;
 
     node = ogs_calloc(1, sizeof(ogs_socknode_t));
+    ogs_assert(node);
+
     rv = ogs_getaddrinfo(&node->addr, family, hostname, port, flags);
+    ogs_assert(node->addr);
     ogs_assert(rv == OGS_OK);
 
     return node;
@@ -38,6 +41,8 @@ ogs_socknode_t *ogs_socknode_new(
 void ogs_socknode_free(ogs_socknode_t *node)
 {
     ogs_freeaddrinfo(node->addr);
+    if (node->sock)
+        ogs_sock_destroy(node->sock);
     ogs_free(node);
 }
 
@@ -82,16 +87,6 @@ void ogs_socknode_remove_all(ogs_list_t *list)
 
     ogs_list_for_each_safe(list, saved_node, node)
         ogs_socknode_remove(list, node);
-}
-
-void ogs_socknode_shutdown_all(ogs_list_t *list)
-{
-    ogs_socknode_t *snode;
-
-    ogs_assert(list);
-
-    ogs_list_for_each(list, snode)
-        ogs_sock_destroy(snode->sock);
 }
 
 int ogs_socknode_probe(
