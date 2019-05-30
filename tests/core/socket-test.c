@@ -385,18 +385,18 @@ static void test7_func(abts_case *tc, void *data)
     rv = ogs_getaddrinfo(&addr, AF_UNSPEC, "localhost", PORT, 0);
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
-    node = ogs_sock_add_node(&list, AF_INET, addr);
+    node = ogs_socknode_add(&list, AF_INET, addr);
     ABTS_PTR_NOTNULL(tc, node);
 
     ogs_freeaddrinfo(addr);
 
-    ogs_sock_remove_all_nodes(&list);
+    ogs_socknode_remove_all(&list);
 
-    rv = ogs_sock_probe_node(&list, &list6, NULL, PORT);
+    rv = ogs_socknode_probe(&list, &list6, NULL, PORT);
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
-    ogs_sock_remove_all_nodes(&list);
-    ogs_sock_remove_all_nodes(&list6);
+    ogs_socknode_remove_all(&list);
+    ogs_socknode_remove_all(&list6);
 }
 
 static void test8_func(abts_case *tc, void *data)

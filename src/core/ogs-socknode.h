@@ -37,15 +37,20 @@ typedef struct ogs_socknode_s {
     ogs_poll_t *poll;
 } ogs_socknode_t;
 
-ogs_socknode_t *ogs_sock_add_node(
+ogs_socknode_t *ogs_socknode_new(
+        int family, const char *hostname, uint16_t port, int flags);
+void ogs_socknode_free(ogs_socknode_t *node);
+
+ogs_socknode_t *ogs_socknode_add(
         ogs_list_t *list, int family, ogs_sockaddr_t *sa_list);
-void ogs_sock_remove_all_nodes(ogs_list_t *list);
+void ogs_socknode_remove(ogs_list_t *list, ogs_socknode_t *node);
+void ogs_socknode_remove_all(ogs_list_t *list);
 
-void ogs_sock_shutdown_all_nodes(ogs_list_t *list);
+void ogs_socknode_shutdown_all(ogs_list_t *list);
 
-int ogs_sock_probe_node(
+int ogs_socknode_probe(
         ogs_list_t *list, ogs_list_t *list6, const char *dev, uint16_t port);
-int ogs_sock_fill_scope_id_in_local(ogs_sockaddr_t *sa_list);
+int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list);
 
 #ifdef __cplusplus
 }

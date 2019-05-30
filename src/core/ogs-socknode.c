@@ -22,7 +22,26 @@
 #undef OGS_LOG_DOMAIN
 #define OGS_LOG_DOMAIN __ogs_sock_domain
 
-ogs_socknode_t *ogs_sock_add_node(
+ogs_socknode_t *ogs_socknode_new(
+        int family, const char *hostname, uint16_t port, int flags)
+{
+    int rv;
+    ogs_socknode_t *node = NULL;
+
+    node = ogs_calloc(1, sizeof(ogs_socknode_t));
+    rv = ogs_getaddrinfo(&node->addr, family, hostname, port, flags);
+    ogs_assert(rv == OGS_OK);
+
+    return node;
+}
+
+void ogs_socknode_free(ogs_socknode_t *node)
+{
+    ogs_freeaddrinfo(node->addr);
+    ogs_free(node);
+}
+
+ogs_socknode_t *ogs_socknode_add(
         ogs_list_t *list, int family, ogs_sockaddr_t *sa_list)
 {
     int rv;
@@ -49,25 +68,23 @@ ogs_socknode_t *ogs_sock_add_node(
     return node;
 }
 
-void ogs_sock_remove_node(ogs_list_t *list, ogs_socknode_t *node)
+void ogs_socknode_remove(ogs_list_t *list, ogs_socknode_t *node)
 {
     ogs_assert(node);
 
     ogs_list_remove(list, node);
-
-    ogs_freeaddrinfo(node->addr);
-    ogs_free(node);
+    ogs_socknode_free(node);
 }
 
-void ogs_sock_remove_all_nodes(ogs_list_t *list)
+void ogs_socknode_remove_all(ogs_list_t *list)
 {
     ogs_socknode_t *node = NULL, *saved_node = NULL;
 
     ogs_list_for_each_safe(list, saved_node, node)
-        ogs_sock_remove_node(list, node);
+        ogs_socknode_remove(list, node);
 }
 
-void ogs_sock_shutdown_all_nodes(ogs_list_t *list)
+void ogs_socknode_shutdown_all(ogs_list_t *list)
 {
     ogs_socknode_t *snode;
 
@@ -77,7 +94,7 @@ void ogs_sock_shutdown_all_nodes(ogs_list_t *list)
         ogs_sock_destroy(snode->sock);
 }
 
-int ogs_sock_probe_node(
+int ogs_socknode_probe(
         ogs_list_t *list, ogs_list_t *list6, const char *dev, uint16_t port)
 {
 #if defined(HAVE_GETIFADDRS)
@@ -163,7 +180,7 @@ int ogs_sock_probe_node(
 
 }
 
-int ogs_sock_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
+int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
 {
 #if defined(HAVE_GETIFADDRS)
 	struct ifaddrs *iflist = NULL, *cur;
