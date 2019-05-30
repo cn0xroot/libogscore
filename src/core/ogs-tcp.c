@@ -33,7 +33,7 @@ ogs_sock_t *ogs_tcp_server(ogs_sockaddr_t *sa_list)
 
     addr = sa_list;
     while(addr) {
-        new = ogs_sock_socket(addr->c_sa_family, SOCK_STREAM, IPPROTO_TCP);
+        new = ogs_sock_socket(addr->ogs_sa_family, SOCK_STREAM, IPPROTO_TCP);
         if (new) {
             rv = ogs_listen_reusable(new->fd);
             ogs_assert(rv == OGS_OK);
@@ -73,7 +73,7 @@ ogs_sock_t *ogs_tcp_client(ogs_sockaddr_t *sa_list)
 
     addr = sa_list;
     while (addr) {
-        new = ogs_sock_socket(addr->c_sa_family, SOCK_STREAM, IPPROTO_TCP);
+        new = ogs_sock_socket(addr->ogs_sa_family, SOCK_STREAM, IPPROTO_TCP);
         if (new) {
             if (ogs_sock_connect(new, addr) == OGS_OK) {
                 ogs_debug("tcp_client() [%s]:%d",

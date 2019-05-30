@@ -81,7 +81,7 @@ int ogs_addaddrinfo(ogs_sockaddr_t **sa_list,
 
         new = ogs_calloc(1, sizeof(ogs_sockaddr_t));
         memcpy(&new->sa, ai->ai_addr, ai->ai_addrlen);
-        new->c_sa_port = htons(port);
+        new->ogs_sin_port = htons(port);
         ogs_trace("addr:%s, port:%d", OGS_ADDR(new, buf), port);
 
         if (!prev)
@@ -115,7 +115,7 @@ int ogs_filteraddrinfo(ogs_sockaddr_t **sa_list, int family)
     while (addr) {
         next = addr->next;
 
-        if (addr->c_sa_family != family) {
+        if (addr->ogs_sa_family != family) {
             if (prev)
                 prev->next = addr->next;
             else
@@ -165,12 +165,12 @@ int ogs_sortaddrinfo(ogs_sockaddr_t **sa_list, int family)
 
         old = old->next;
 
-        if (head == NULL || addr->c_sa_family == family) {
+        if (head == NULL || addr->ogs_sa_family == family) {
             addr->next = head;
             head = addr;
         } else {
             new = head;
-            while(new->next != NULL && new->next->c_sa_family != family) {
+            while(new->next != NULL && new->next->ogs_sa_family != family) {
                 new = new->next;
             }
             addr->next = new->next;
@@ -236,7 +236,7 @@ const char *ogs_inet_ntop(void *sa, char *buf, int buflen)
     ogs_assert(buf);
     ogs_assert(buflen >= OGS_ADDRSTRLEN);
 
-    family = sockaddr->c_sa_family;
+    family = sockaddr->ogs_sa_family;
     switch(family) {
     case AF_INET:
         return inet_ntop(family, &sockaddr->sin.sin_addr, buf,
@@ -259,7 +259,7 @@ int ogs_inet_pton(int family, const char *src, void *sa)
     dst = sa;
     ogs_assert(dst);
 
-    dst->c_sa_family = family;
+    dst->ogs_sa_family = family;
     switch(family) {
     case AF_INET:
         return inet_pton(family, src, &dst->sin.sin_addr) == 1 ?
@@ -280,13 +280,13 @@ socklen_t ogs_sockaddr_len(const void *sa)
 
     ogs_assert(sa);
 
-    switch(sockaddr->c_sa_family) {
+    switch(sockaddr->ogs_sa_family) {
     case AF_INET:
         return sizeof(struct sockaddr_in);
     case AF_INET6:
         return sizeof(struct sockaddr_in6);
     default:
-        ogs_fatal("Unknown family(%d)", sockaddr->c_sa_family);
+        ogs_fatal("Unknown family(%d)", sockaddr->ogs_sa_family);
         ogs_abort();
         return OGS_ERROR;
     }
@@ -301,17 +301,17 @@ bool sockaddr_is_equal(void *p, void *q)
     b = q;
     ogs_assert(b);
 
-    if (a->c_sa_family != b->c_sa_family)
+    if (a->ogs_sa_family != b->ogs_sa_family)
         return false;
 
-    if (a->c_sa_family == AF_INET && memcmp(
+    if (a->ogs_sa_family == AF_INET && memcmp(
         &a->sin.sin_addr, &b->sin.sin_addr, sizeof(struct in_addr)) == 0)
         return true;
-    else if (a->c_sa_family == AF_INET6 && memcmp(
+    else if (a->ogs_sa_family == AF_INET6 && memcmp(
         &a->sin6.sin6_addr, &b->sin6.sin6_addr, sizeof(struct in6_addr)) == 0)
         return true;
     else {
-        ogs_fatal("Unknown family(%d)", a->c_sa_family);
+        ogs_fatal("Unknown family(%d)", a->ogs_sa_family);
         ogs_abort();
     }
 

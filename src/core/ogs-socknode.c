@@ -137,15 +137,15 @@ int ogs_sock_probe_node(
 
         addr = ogs_calloc(1, sizeof(ogs_sockaddr_t));
         memcpy(&addr->sa, cur->ifa_addr, ogs_sockaddr_len(cur->ifa_addr));
-        addr->c_sa_port = htons(port);
+        addr->ogs_sin_port = htons(port);
 
         node = ogs_calloc(1, sizeof(ogs_socknode_t));
         node->addr = addr;
 
-        if (addr->c_sa_family == AF_INET) {
+        if (addr->ogs_sa_family == AF_INET) {
             ogs_assert(list);
             ogs_list_add(list, node);
-        } else if (addr->c_sa_family == AF_INET6) {
+        } else if (addr->ogs_sa_family == AF_INET6) {
             ogs_assert(list6);
             ogs_list_add(list6, node);
         } else
@@ -171,7 +171,7 @@ int ogs_sock_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
     ogs_sockaddr_t *addr, *ifaddr;
 
     for (addr = sa_list; addr != NULL; addr = addr->next) {
-        if (addr->c_sa_family != AF_INET6)
+        if (addr->ogs_sa_family != AF_INET6)
             continue;
 
         if (!IN6_IS_ADDR_LINKLOCAL(&addr->sin6.sin6_addr))

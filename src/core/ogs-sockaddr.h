@@ -38,8 +38,8 @@ struct ogs_sockaddr_s {
      *   ...
      *   sockaddr_len((ogs_sockaddr_t *)&addr);
      */
-#define c_sa_family sa.sa_family
-#define c_sa_port sin.sin_port
+#define ogs_sa_family sa.sa_family
+#define ogs_sin_port sin.sin_port
     union {
         struct sockaddr_storage ss;
         struct sockaddr_in sin;
@@ -76,7 +76,7 @@ ogs_sockaddr_t *ogs_link_local_addr_by_dev(const char *dev);
 #define OGS_ADDR(__aDDR, __bUF) \
     ogs_inet_ntop(__aDDR, buf, OGS_ADDRSTRLEN)
 #define OGS_PORT(__aDDR) \
-    ntohs((__aDDR)->c_sa_port)
+    ntohs((__aDDR)->ogs_sin_port)
 const char *ogs_inet_ntop(void *addr, char *buf, int buflen);
 int ogs_inet_pton(int family, const char *src, void *addr);
 

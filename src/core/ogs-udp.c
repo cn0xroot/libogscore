@@ -45,7 +45,7 @@ ogs_sock_t *ogs_udp_server(ogs_sockaddr_t *sa_list)
 
     addr = sa_list;
     while (addr) {
-        new = ogs_udp_socket(addr->c_sa_family);
+        new = ogs_udp_socket(addr->ogs_sa_family);
         if (new) {
             rv = ogs_listen_reusable(new->fd);
             ogs_assert(rv == OGS_OK);
@@ -82,7 +82,7 @@ ogs_sock_t *ogs_udp_client(ogs_sockaddr_t *sa_list)
 
     addr = sa_list;
     while (addr) {
-        new = ogs_udp_socket(addr->c_sa_family);
+        new = ogs_udp_socket(addr->ogs_sa_family);
         if (new) {
             if (ogs_sock_connect(new, addr) == OGS_OK) {
                 ogs_debug("udp_client() [%s]:%d",
