@@ -34,7 +34,6 @@ static void test1_func(abts_case *tc, void *data)
     ogs_sock_t *udp;
     ogs_sockaddr_t *addr;
     ogs_socknode_t *node;
-    int rv;
 
     node = ogs_socknode_new(AF_UNSPEC, NULL, PORT, AI_PASSIVE);
     ABTS_PTR_NOTNULL(tc, node);
@@ -49,7 +48,7 @@ static void test1_func(abts_case *tc, void *data)
     ogs_socknode_free(node);
 
     node = ogs_socknode_new(AF_UNSPEC, "::1", PORT, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
+    ABTS_PTR_NOTNULL(tc, node);
     udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
     ogs_socknode_free(node);
@@ -59,7 +58,6 @@ static ogs_thread_t *test2_thread;
 static void test2_main(void *data)
 {
     abts_case *tc = data;
-    int rv;
     ogs_sock_t *tcp;
     ogs_socknode_t *node;
     char str[STRLEN];
@@ -78,7 +76,6 @@ static void test2_main(void *data)
 
 static void test2_func(abts_case *tc, void *data)
 {
-    int rv;
     ogs_sock_t *tcp, *tcp2;
     ogs_sockaddr_t *addr;
     ogs_socknode_t *node;
@@ -114,7 +111,6 @@ static void test3_main(void *data)
     ogs_socknode_t *node;
     char str[STRLEN];
     ssize_t size;
-    int rc;
     char buf[OGS_ADDRSTRLEN];
 
     rv = ogs_getaddrinfo(&addr, AF_INET, NULL, PORT, 0);
@@ -135,7 +131,6 @@ static void test3_main(void *data)
 static void test3_func(abts_case *tc, void *data)
 {
     ogs_sock_t *udp;
-    int rv;
     ssize_t size;
     ogs_sockaddr_t sa;
     ogs_socknode_t *node;
@@ -149,7 +144,7 @@ static void test3_func(abts_case *tc, void *data)
     ABTS_PTR_NOTNULL(tc, udp);
 
     test3_thread = ogs_thread_create(test3_main, tc);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
+    ABTS_PTR_NOTNULL(tc, test3_thread);
 
     size = ogs_recvfrom(udp->fd, str, STRLEN, 0, &sa);
     ABTS_INT_EQUAL(tc, strlen(DATASTR), size);
@@ -164,7 +159,6 @@ static ogs_thread_t *test4_thread;
 static void test4_main(void *data)
 {
     abts_case *tc = data;
-    int rv;
     ogs_sock_t *udp;
     ogs_socknode_t *node;
     char str[STRLEN];
@@ -187,7 +181,6 @@ static void test4_main(void *data)
 static void test4_func(abts_case *tc, void *data)
 {
     ogs_sock_t *udp;
-    int rv;
     ssize_t size;
     ogs_sockaddr_t sa;
     ogs_socknode_t *node;
