@@ -22,16 +22,17 @@
 #undef OGS_LOG_DOMAIN
 #define OGS_LOG_DOMAIN __ogs_sock_domain
 
-ogs_sock_t *ogs_tcp_server(ogs_sockaddr_t *sa_list)
+ogs_sock_t *ogs_tcp_server(ogs_socknode_t *node)
 {
     int rv;
     ogs_sock_t *new = NULL;
     ogs_sockaddr_t *addr;
     char buf[OGS_ADDRSTRLEN];
 
-    ogs_assert(sa_list);
+    ogs_assert(node);
+    ogs_assert(node->addr);
 
-    addr = sa_list;
+    addr = node->addr;
     while(addr) {
         new = ogs_sock_socket(addr->ogs_sa_family, SOCK_STREAM, IPPROTO_TCP);
         if (new) {
@@ -53,25 +54,28 @@ ogs_sock_t *ogs_tcp_server(ogs_sockaddr_t *sa_list)
     if (addr == NULL) {
         ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
                 "tcp_server() [%s]:%d failed",
-                OGS_ADDR(sa_list, buf), OGS_PORT(sa_list));
+                OGS_ADDR(node->addr, buf), OGS_PORT(node->addr));
         return NULL;
     }
 
     rv = ogs_sock_listen(new);
     ogs_assert(rv == OGS_OK);
 
+    node->sock = new;
+
     return new;
 }
 
-ogs_sock_t *ogs_tcp_client(ogs_sockaddr_t *sa_list)
+ogs_sock_t *ogs_tcp_client(ogs_socknode_t *node)
 {
     ogs_sock_t *new = NULL;
     ogs_sockaddr_t *addr;
     char buf[OGS_ADDRSTRLEN];
 
-    ogs_assert(sa_list);
+    ogs_assert(node);
+    ogs_assert(node->addr);
 
-    addr = sa_list;
+    addr = node->addr;
     while (addr) {
         new = ogs_sock_socket(addr->ogs_sa_family, SOCK_STREAM, IPPROTO_TCP);
         if (new) {
@@ -90,9 +94,11 @@ ogs_sock_t *ogs_tcp_client(ogs_sockaddr_t *sa_list)
     if (addr == NULL) {
         ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
                 "tcp_client() [%s]:%d failed",
-                OGS_ADDR(addr, buf), OGS_PORT(addr));
+                OGS_ADDR(node->addr, buf), OGS_PORT(node->addr));
         return NULL;
     }
+
+    node->sock = new;
 
     return new;
 }

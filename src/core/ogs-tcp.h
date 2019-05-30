@@ -28,8 +28,8 @@
 extern "C" {
 #endif
 
-ogs_sock_t *ogs_tcp_server(ogs_sockaddr_t *sa_list);
-ogs_sock_t *ogs_tcp_client(ogs_sockaddr_t *sa_list);
+ogs_sock_t *ogs_tcp_server(ogs_socknode_t *node);
+ogs_sock_t *ogs_tcp_client(ogs_socknode_t *node);
 
 #ifdef __cplusplus
 }

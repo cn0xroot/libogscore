@@ -122,7 +122,8 @@ static void test1_func(abts_case *tc, void *data)
     ogs_pollset_destroy(pollset);
 }
 
-static ogs_sock_t *test2_server, *test2_client, *test2_accept;
+static ogs_socknode_t *test2_server, *test2_client;
+static ogs_sock_t *test2_accept;
 static int test2_okay = 1;
 
 static void test2_handler(short when, ogs_socket_t fd, void *data)
@@ -136,7 +137,7 @@ static void test2_handler(short when, ogs_socket_t fd, void *data)
     len = ogs_send(fd, test, (int)strlen(test) + 1, 0);
 
     if (len > 0) {
-        ogs_sock_destroy(test2_client);
+        ogs_socknode_free(test2_client);
     }
 
     test2_okay = 0;
@@ -151,21 +152,17 @@ static void test2_func(abts_case *tc, void *data)
     ogs_pollset_t *pollset = ogs_pollset_create();
     ABTS_PTR_NOTNULL(tc, pollset);
 
-    rv = ogs_getaddrinfo(&addr, AF_INET, "127.0.0.1", PORT, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    test2_server = ogs_tcp_server(addr);
+    test2_server = ogs_socknode_new(AF_INET, "127.0.0.1", PORT, AI_PASSIVE);
     ABTS_PTR_NOTNULL(tc, test2_server);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
+    ogs_tcp_server(test2_server);
+    ABTS_PTR_NOTNULL(tc, test2_server->sock);
 
-    rv = ogs_getaddrinfo(&addr, AF_INET, "127.0.0.1", PORT, AI_PASSIVE);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
-    test2_client = ogs_tcp_client(addr);
+    test2_client = ogs_socknode_new(AF_INET, "127.0.0.1", PORT, AI_PASSIVE);
     ABTS_PTR_NOTNULL(tc, test2_client);
-    rv = ogs_freeaddrinfo(addr);
-    ABTS_INT_EQUAL(tc, OGS_OK, rv);
+    ogs_tcp_client(test2_client);
+    ABTS_PTR_NOTNULL(tc, test2_client->sock);
 
-    test2_accept = ogs_sock_accept(test2_server);
+    test2_accept = ogs_sock_accept(test2_server->sock);
     ABTS_PTR_NOTNULL(tc, test2_accept);
 
     poll = ogs_pollset_add(pollset, OGS_POLLOUT,
@@ -180,7 +177,7 @@ static void test2_func(abts_case *tc, void *data)
     ogs_pollset_remove(poll);
 
     ogs_sock_destroy(test2_accept);
-    ogs_sock_destroy(test2_server);
+    ogs_socknode_free(test2_server);
 
     ogs_pollset_destroy(pollset);
 }
