@@ -127,7 +127,8 @@ static int epoll_remove(ogs_poll_t *poll)
 
     rv = epoll_ctl(context->epfd, EPOLL_CTL_DEL, poll->fd, &ee);
     if (rv < 0) {
-		ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "epoll_ctl failed");
+		ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
+                "epoll_remove failed");
         return OGS_ERROR;
     }
 

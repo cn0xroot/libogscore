@@ -41,6 +41,8 @@ ogs_socknode_t *ogs_socknode_new(
 void ogs_socknode_free(ogs_socknode_t *node)
 {
     ogs_freeaddrinfo(node->addr);
+    if (node->poll)
+        ogs_pollset_remove(node->poll);
     if (node->sock)
         ogs_sock_destroy(node->sock);
     ogs_free(node);

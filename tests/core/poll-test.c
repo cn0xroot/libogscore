@@ -284,8 +284,8 @@ static void test4_func(abts_case *tc, void *data)
     udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
 
-    poll = ogs_pollset_add(pollset, OGS_POLLIN, udp->fd, test4_handler, tc);
-    ABTS_PTR_NOTNULL(tc, poll);
+    node->poll = ogs_pollset_add(pollset, OGS_POLLIN, udp->fd, test4_handler, tc);
+    ABTS_PTR_NOTNULL(tc, node->poll);
 
     test4_thread = ogs_thread_create(test4_main, tc);
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
@@ -294,8 +294,6 @@ static void test4_func(abts_case *tc, void *data)
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
 
     ogs_thread_destroy(test4_thread);
-
-    ogs_pollset_remove(poll);
 
     ogs_socknode_free(node);
 
