@@ -235,11 +235,3 @@ int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
     return OGS_ERROR;
 #endif
 }
-
-void ogs_socknode_set_sctp_max_num_of_ostreams(
-        ogs_socknode_t *node, uint16_t max_num_of_ostreams)
-{
-    ogs_assert(node);
-    node->sctp.max_num_of_ostreams = max_num_of_ostreams;
-}
-
