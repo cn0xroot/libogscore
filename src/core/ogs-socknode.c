@@ -249,7 +249,7 @@ void ogs_socknode_set_option(ogs_socknode_t *node, ogs_sockopt_t *option)
 }
 
 void ogs_socknode_set_poll(ogs_socknode_t *node,
-        ogs_pollset_t *set, short when, ogs_poll_handler_f handler, void *data)
+        ogs_pollset_t *set, short when, void *handler, void *data)
 {
     ogs_assert(node);
     ogs_assert(set);

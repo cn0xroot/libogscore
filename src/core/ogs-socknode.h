@@ -41,9 +41,8 @@ typedef struct ogs_sockopt_s {
     } sctp;
 } ogs_sockopt_t;
 
-typedef struct ogs_poll_s ogs_poll_t;
 typedef struct ogs_pollset_s ogs_pollset_t;
-typedef void (*ogs_poll_handler_f)(short when, ogs_socket_t fd, void *data);
+typedef struct ogs_poll_s ogs_poll_t;
 
 typedef struct ogs_socknode_s {
     ogs_lnode_t node;
@@ -53,7 +52,7 @@ typedef struct ogs_socknode_s {
     struct {
         ogs_pollset_t *set;
         ogs_poll_t *poll;
-        ogs_poll_handler_f handler;
+        void *handler;
         void *data;
     } pollin, pollout;
 
@@ -75,7 +74,7 @@ int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list);
 
 void ogs_socknode_set_option(ogs_socknode_t *node, ogs_sockopt_t *option);
 void ogs_socknode_set_poll(ogs_socknode_t *node,
-        ogs_pollset_t *set, short when, ogs_poll_handler_f handler, void *data);
+        ogs_pollset_t *set, short when, void *handler, void *data);
 void ogs_socknode_install_poll(ogs_socknode_t *node);
 
 #ifdef __cplusplus
