@@ -71,6 +71,8 @@ ogs_sock_t *ogs_udp_server(ogs_socknode_t *node)
 
     node->sock = new;
 
+    ogs_socknode_run_poll(node);
+
     return new;
 }
 
@@ -107,6 +109,8 @@ ogs_sock_t *ogs_udp_client(ogs_socknode_t *node)
     }
 
     node->sock = new;
+
+    ogs_socknode_run_poll(node);
 
     return new;
 }

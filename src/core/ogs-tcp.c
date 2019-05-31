@@ -63,6 +63,8 @@ ogs_sock_t *ogs_tcp_server(ogs_socknode_t *node)
 
     node->sock = new;
 
+    ogs_socknode_run_poll(node);
+
     return new;
 }
 
@@ -99,6 +101,8 @@ ogs_sock_t *ogs_tcp_client(ogs_socknode_t *node)
     }
 
     node->sock = new;
+
+    ogs_socknode_run_poll(node);
 
     return new;
 }

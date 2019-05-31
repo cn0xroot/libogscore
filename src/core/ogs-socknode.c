@@ -41,8 +41,10 @@ ogs_socknode_t *ogs_socknode_new(
 void ogs_socknode_free(ogs_socknode_t *node)
 {
     ogs_freeaddrinfo(node->addr);
-    if (node->poll)
-        ogs_pollset_remove(node->poll);
+    if (node->pollin.poll)
+        ogs_pollset_remove(node->pollin.poll);
+    if (node->pollout.poll)
+        ogs_pollset_remove(node->pollout.poll);
     if (node->sock)
         ogs_sock_destroy(node->sock);
     ogs_free(node);
@@ -236,4 +238,46 @@ int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
     ogs_assert_if_reached();
     return OGS_ERROR;
 #endif
+}
+
+void ogs_socknode_setup_poll(ogs_socknode_t *node,
+        ogs_pollset_t *set, short when, ogs_poll_handler_f handler, void *data)
+{
+    ogs_assert(node);
+    ogs_assert(set);
+
+    if (when == OGS_POLLIN) {
+        node->pollin.set = set;
+        node->pollin.handler = handler;
+        node->pollin.data = data;
+    } else if (when == OGS_POLLOUT) {
+        node->pollout.set = set;
+        node->pollout.handler = handler;
+        node->pollout.data = data;
+    }
+}
+
+void ogs_socknode_run_poll(ogs_socknode_t *node)
+{
+    ogs_assert(node);
+
+    if (node->pollin.handler) {
+        ogs_assert(node->sock);
+        ogs_assert(node->pollin.set);
+        ogs_assert(node->pollin.handler);
+
+        node->pollin.poll = ogs_pollset_add(node->pollin.set,
+            OGS_POLLIN, node->sock->fd, node->pollin.handler, node->pollin.data);
+        ogs_assert(node->pollin.poll);
+    }
+    if (node->pollout.handler) {
+        ogs_assert(node->sock);
+        ogs_assert(node->pollout.set);
+        ogs_assert(node->pollout.handler);
+
+        node->pollout.poll = ogs_pollset_add(node->pollout.set,
+            OGS_POLLOUT, node->sock->fd, node->pollout.handler, node->pollout.data);
+        ogs_assert(node->pollout.poll);
+    }
+
 }
