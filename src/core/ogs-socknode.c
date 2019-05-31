@@ -22,13 +22,6 @@
 #undef OGS_LOG_DOMAIN
 #define OGS_LOG_DOMAIN __ogs_sock_domain
 
-static void ogs_socknode_default(ogs_socknode_t *node)
-{
-    ogs_assert(node);
-#define DEFAULT_SCTP_MAX_NUM_OF_OSTREAMS 30
-    node->sctp.max_num_of_ostreams = DEFAULT_SCTP_MAX_NUM_OF_OSTREAMS;
-}
-
 ogs_socknode_t *ogs_socknode_new(
         int family, const char *hostname, uint16_t port, int flags)
 {
@@ -36,7 +29,7 @@ ogs_socknode_t *ogs_socknode_new(
     ogs_socknode_t *node = NULL;
 
     node = ogs_calloc(1, sizeof(ogs_socknode_t));
-    ogs_socknode_default(node);
+    ogs_assert(node);
 
     rv = ogs_getaddrinfo(&node->addr, family, hostname, port, flags);
     ogs_assert(node->addr);
@@ -73,7 +66,7 @@ ogs_socknode_t *ogs_socknode_add(
 
     if (newaddr) {
         node = ogs_calloc(1, sizeof(ogs_socknode_t));
-        ogs_socknode_default(node);
+        ogs_assert(node);
 
         node->addr = newaddr;
 
