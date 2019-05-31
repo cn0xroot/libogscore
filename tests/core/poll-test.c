@@ -281,7 +281,7 @@ static void test4_func(abts_case *tc, void *data)
 
     node = ogs_socknode_new(AF_INET, NULL, PORT, AI_PASSIVE);
     ABTS_PTR_NOTNULL(tc, node);
-    ogs_socknode_setup_poll(node, pollset, OGS_POLLIN, test4_handler, tc);
+    ogs_socknode_set_poll(node, pollset, OGS_POLLIN, test4_handler, tc);
     udp = ogs_udp_server(node);
     ABTS_PTR_NOTNULL(tc, udp);
 

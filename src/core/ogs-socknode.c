@@ -240,11 +240,20 @@ int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
 #endif
 }
 
-void ogs_socknode_setup_poll(ogs_socknode_t *node,
+void ogs_socknode_set_option(ogs_socknode_t *node, ogs_sockopt_t *option)
+{
+    ogs_assert(node);
+    ogs_assert(option);
+
+    memcpy(&node->option, option, sizeof *option);
+}
+
+void ogs_socknode_set_poll(ogs_socknode_t *node,
         ogs_pollset_t *set, short when, ogs_poll_handler_f handler, void *data)
 {
     ogs_assert(node);
     ogs_assert(set);
+    ogs_assert(handler);
 
     if (when == OGS_POLLIN) {
         node->pollin.set = set;
@@ -257,7 +266,7 @@ void ogs_socknode_setup_poll(ogs_socknode_t *node,
     }
 }
 
-void ogs_socknode_run_poll(ogs_socknode_t *node)
+void ogs_socknode_install_poll(ogs_socknode_t *node)
 {
     ogs_assert(node);
 
