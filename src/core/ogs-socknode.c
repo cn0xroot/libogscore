@@ -45,12 +45,8 @@ void ogs_socknode_free(ogs_socknode_t *node)
         ogs_pollset_remove(node->pollin.poll);
     if (node->pollout.poll)
         ogs_pollset_remove(node->pollout.poll);
-    if (node->sock) {
-        if (node->closesocket)
-            node->closesocket(node->sock);
-        else
-            ogs_sock_destroy(node->sock);
-    }
+    if (node->sock)
+        ogs_sock_destroy(node->sock);
     ogs_free(node);
 }
 
@@ -242,13 +238,6 @@ int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list)
     ogs_assert_if_reached();
     return OGS_ERROR;
 #endif
-}
-
-void ogs_socknode_set_closesocket(ogs_socknode_t *node,
-        void (*closesocket)(void *))
-{
-    ogs_assert(node);
-    node->closesocket = closesocket;
 }
 
 void ogs_socknode_set_option(ogs_socknode_t *node, ogs_sockopt_t *option)

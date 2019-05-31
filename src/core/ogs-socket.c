@@ -56,10 +56,14 @@ void ogs_sock_destroy(ogs_sock_t *sock)
 {
     ogs_assert(sock);
 
-    if (sock->fd != INVALID_SOCKET) {
-        ogs_closesocket(sock->fd);
+    if (sock->closesock) {
+        sock->closesock(sock);
+    } else {
+        if (sock->fd != INVALID_SOCKET) {
+            ogs_closesocket(sock->fd);
+        }
+        sock->fd = INVALID_SOCKET;
     }
-    sock->fd = INVALID_SOCKET;
 
     ogs_free(sock);
 }

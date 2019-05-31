@@ -44,6 +44,8 @@ typedef struct ogs_sock_s {
 
     ogs_sockaddr_t local_addr;
     ogs_sockaddr_t remote_addr;
+
+    void (*closesock)(void *);
 } ogs_sock_t;
 
 void ogs_socket_init(void);
