@@ -35,6 +35,10 @@ typedef struct ogs_socknode_s {
     ogs_sock_t *sock;
     ogs_sockaddr_t *addr;
     ogs_poll_t *poll;
+
+    struct {
+        uint16_t max_num_of_ostreams;
+    } sctp;
 } ogs_socknode_t;
 
 ogs_socknode_t *ogs_socknode_new(
@@ -49,6 +53,9 @@ void ogs_socknode_remove_all(ogs_list_t *list);
 int ogs_socknode_probe(
         ogs_list_t *list, ogs_list_t *list6, const char *dev, uint16_t port);
 int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list);
+
+void ogs_socknode_set_sctp_max_num_of_ostreams(
+        ogs_socknode_t *node, uint16_t max_num_of_ostreams);
 
 #ifdef __cplusplus
 }
