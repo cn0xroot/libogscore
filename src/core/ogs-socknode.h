@@ -50,6 +50,7 @@ typedef struct ogs_socknode_s {
     ogs_sockaddr_t *addr;
 
     ogs_sock_t *sock;
+    void (*cleanup)(ogs_sock_t *sock);
 
     struct {
         ogs_pollset_t *set;
@@ -74,6 +75,8 @@ int ogs_socknode_probe(
         ogs_list_t *list, ogs_list_t *list6, const char *dev, uint16_t port);
 int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list);
 
+void ogs_socknode_set_cleanup(
+        ogs_socknode_t *node, void (*cleanup)(ogs_sock_t *));
 void ogs_socknode_set_option(ogs_socknode_t *node, ogs_sockopt_t *option);
 void ogs_socknode_set_poll(ogs_socknode_t *node,
         ogs_pollset_t *set, short when, void *handler, void *data);
