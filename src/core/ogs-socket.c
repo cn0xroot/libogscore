@@ -56,14 +56,10 @@ void ogs_sock_destroy(ogs_sock_t *sock)
 {
     ogs_assert(sock);
 
-    if (sock->closesock) {
-        sock->closesock(sock);
-    } else {
-        if (sock->fd != INVALID_SOCKET) {
-            ogs_closesocket(sock->fd);
-        }
-        sock->fd = INVALID_SOCKET;
+    if (sock->fd != INVALID_SOCKET) {
+        ogs_closesocket(sock->fd);
     }
+    sock->fd = INVALID_SOCKET;
 
     ogs_free(sock);
 }
@@ -160,14 +156,13 @@ ogs_sock_t *ogs_sock_accept(ogs_sock_t *sock)
     ogs_sockaddr_t addr;
     socklen_t addrlen;
 
+    ogs_assert(sock);
+
     memset(&addr, 0, sizeof(addr));
     addrlen = sizeof(addr.ss);
 
-    ogs_assert(sock);
-
     new_fd = accept(sock->fd, &addr.sa, &addrlen);
-    if (new_fd < 0)
-    {
+    if (new_fd < 0) {
         ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "accept failed");
         return NULL;
     }
@@ -190,8 +185,7 @@ ssize_t ogs_write(ogs_socket_t fd, const void *buf, size_t len)
     ogs_assert(fd != INVALID_SOCKET);
 
     size = write(fd, buf, len);
-    if (size < 0)
-    {
+    if (size < 0) {
         ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
                 "ogs_write(len:%d) failed", (int)size);
     }
@@ -206,8 +200,7 @@ ssize_t ogs_read(ogs_socket_t fd, void *buf, size_t len)
     ogs_assert(fd != INVALID_SOCKET);
 
     size = read(fd, buf, len);
-    if (size < 0)
-    {
+    if (size < 0) {
         ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,
                 "ogs_read(len:%d) failed", (int)size);
     }

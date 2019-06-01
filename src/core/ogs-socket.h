@@ -38,15 +38,16 @@ typedef int ogs_socket_t;
 #define INVALID_SOCKET -1
 #endif
 
+typedef struct ogs_sock_s ogs_sock_t;
+
 typedef struct ogs_sock_s {
     int family;
     ogs_socket_t fd;
 
     ogs_sockaddr_t local_addr;
     ogs_sockaddr_t remote_addr;
-
-    void (*closesock)(void *);
 } ogs_sock_t;
+
 
 void ogs_socket_init(void);
 void ogs_socket_final(void);
