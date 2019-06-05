@@ -226,6 +226,32 @@ ogs_sockaddr_t *ogs_link_local_addr_by_dev(const char *dev)
     return NULL;
 }
 
+int ogs_filter_ip_version(ogs_sockaddr_t **addr, 
+        int no_ipv4, int no_ipv6, int prefer_ipv4)
+{
+    int rv;
+    
+    if (no_ipv4 == 1) {
+        rv = ogs_filteraddrinfo(addr, AF_INET6);
+        ogs_assert(rv == OGS_OK);
+    }
+    if (no_ipv6 == 1) {
+        rv = ogs_filteraddrinfo(addr, AF_INET);
+        ogs_assert(rv == OGS_OK);
+    }
+
+    if (prefer_ipv4 == 1) {
+        rv = ogs_sortaddrinfo(addr, AF_INET);
+        ogs_assert(rv == OGS_OK);
+    } else {
+        rv = ogs_sortaddrinfo(addr, AF_INET6);
+        ogs_assert(rv == OGS_OK);
+    }
+
+    return OGS_OK;
+}
+
+
 const char *ogs_inet_ntop(void *sa, char *buf, int buflen)
 {
     int family;
