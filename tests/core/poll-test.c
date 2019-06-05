@@ -53,11 +53,15 @@ static void test1_func(abts_case *tc, void *data)
     ABTS_PTR_NOTNULL(tc, pollset);
 
     for (i = 0; i < NUM; i++) {
-        server[i] = ogs_socknode_new(AF_INET, "127.0.0.1", PORT+i, AI_PASSIVE);
+        rv = ogs_getaddrinfo(&addr, AF_INET, "127.0.0.1", PORT+i, AI_PASSIVE);
+        ABTS_INT_EQUAL(tc, OGS_OK, rv);
+        server[i] = ogs_socknode_new(addr);
         ABTS_PTR_NOTNULL(tc, server[i]);
         ogs_udp_server(server[i]);
         ABTS_PTR_NOTNULL(tc, server[i]->sock);
-        client[i] = ogs_socknode_new(AF_INET, "127.0.0.1", PORT+i, AI_PASSIVE);
+        rv = ogs_getaddrinfo(&addr, AF_INET, "127.0.0.1", PORT+i, AI_PASSIVE);
+        ABTS_INT_EQUAL(tc, OGS_OK, rv);
+        client[i] = ogs_socknode_new(addr);
         ABTS_PTR_NOTNULL(tc, client[i]);
         ogs_udp_client(client[i]);
         ABTS_PTR_NOTNULL(tc, client[i]->sock);
@@ -152,12 +156,16 @@ static void test2_func(abts_case *tc, void *data)
     ogs_pollset_t *pollset = ogs_pollset_create();
     ABTS_PTR_NOTNULL(tc, pollset);
 
-    test2_server = ogs_socknode_new(AF_INET, "127.0.0.1", PORT, AI_PASSIVE);
+    rv = ogs_getaddrinfo(&addr, AF_INET, "127.0.0.1", PORT, AI_PASSIVE);
+    ABTS_INT_EQUAL(tc, OGS_OK, rv);
+    test2_server = ogs_socknode_new(addr);
     ABTS_PTR_NOTNULL(tc, test2_server);
     ogs_tcp_server(test2_server);
     ABTS_PTR_NOTNULL(tc, test2_server->sock);
 
-    test2_client = ogs_socknode_new(AF_INET, "127.0.0.1", PORT, AI_PASSIVE);
+    rv = ogs_getaddrinfo(&addr, AF_INET, "127.0.0.1", PORT, AI_PASSIVE);
+    ABTS_INT_EQUAL(tc, OGS_OK, rv);
+    test2_client = ogs_socknode_new(addr);
     ABTS_PTR_NOTNULL(tc, test2_client);
     ogs_tcp_client(test2_client);
     ABTS_PTR_NOTNULL(tc, test2_client->sock);
@@ -279,7 +287,9 @@ static void test4_func(abts_case *tc, void *data)
     ogs_pollset_t *pollset = ogs_pollset_create();
     ABTS_PTR_NOTNULL(tc, pollset);
 
-    node = ogs_socknode_new(AF_INET, NULL, PORT, AI_PASSIVE);
+    rv = ogs_getaddrinfo(&addr, AF_INET, NULL, PORT, AI_PASSIVE);
+    ABTS_INT_EQUAL(tc, OGS_OK, rv);
+    node = ogs_socknode_new(addr);
     ABTS_PTR_NOTNULL(tc, node);
     ogs_socknode_set_poll(node, pollset, OGS_POLLIN, test4_handler, tc);
     udp = ogs_udp_server(node);

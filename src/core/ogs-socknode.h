@@ -62,8 +62,7 @@ typedef struct ogs_socknode_s {
     ogs_sockopt_t option;
 } ogs_socknode_t;
 
-ogs_socknode_t *ogs_socknode_new(
-        int family, const char *hostname, uint16_t port, int flags);
+ogs_socknode_t *ogs_socknode_new(ogs_sockaddr_t *addr);
 void ogs_socknode_free(ogs_socknode_t *node);
 
 ogs_socknode_t *ogs_socknode_add(
