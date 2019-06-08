@@ -55,12 +55,9 @@ typedef struct ogs_pkbuf_pool_s {
     OGS_POOL(cluster_8192, ogs_cluster_8192_t);
 
     ogs_thread_mutex_t mutex;
-
-    ogs_pkbuf_config_t *config;
 } ogs_pkbuf_pool_t;
 
-static OGS_POOL(pkbuf_config, ogs_pkbuf_config_t);
-static ogs_pkbuf_config_t *default_config;
+static ogs_pkbuf_config_t default_config;
 
 static OGS_POOL(pkbuf_pool, ogs_pkbuf_pool_t);
 static ogs_pkbuf_pool_t *default_pool;
@@ -71,30 +68,23 @@ static void cluster_free(ogs_pkbuf_pool_t *pool, ogs_cluster_t *cluster);
 
 void ogs_pkbuf_init(void)
 {
-    ogs_pool_init(&pkbuf_config, ogs_core()->pkbuf.config_pool);
     ogs_pool_init(&pkbuf_pool, ogs_core()->pkbuf.pool);
 
-    default_config = ogs_pkbuf_config_new();
-    ogs_assert(default_config);
+    ogs_pkbuf_config_default(&default_config);
 
-    default_pool = ogs_pkbuf_pool_create(default_config);
+    default_pool = ogs_pkbuf_pool_create(&default_config);
     ogs_assert(default_pool);
 }
 
 void ogs_pkbuf_final(void)
 {
     ogs_pkbuf_pool_destroy(default_pool);
-    ogs_pkbuf_config_free(default_config);
 
     ogs_pool_final(&pkbuf_pool);
-    ogs_pool_final(&pkbuf_config);
 }
 
-ogs_pkbuf_config_t *ogs_pkbuf_config_new(void)
+void ogs_pkbuf_config_default(ogs_pkbuf_config_t *config)
 {
-    ogs_pkbuf_config_t *config = NULL;
-
-    ogs_pool_alloc(&pkbuf_config, &config);
     ogs_assert(config);
     memset(config, 0, sizeof *config);
 
@@ -107,12 +97,6 @@ ogs_pkbuf_config_t *ogs_pkbuf_config_new(void)
     config->cluster_1024_pool = 1024;
     config->cluster_2048_pool = 512;
     config->cluster_8192_pool = 128;
-
-    return config;
-}
-void ogs_pkbuf_config_free(ogs_pkbuf_config_t *config)
-{
-    ogs_pool_free(&pkbuf_config, config);
 }
 
 ogs_pkbuf_pool_t *ogs_pkbuf_pool_create(ogs_pkbuf_config_t *config)
@@ -124,7 +108,7 @@ ogs_pkbuf_pool_t *ogs_pkbuf_pool_create(ogs_pkbuf_config_t *config)
     memset(pool, 0, sizeof *pool);
 
     if (!config)
-        config = default_config;
+        config = &default_config;
 
     ogs_thread_mutex_init(&pool->mutex);
 
@@ -138,17 +122,12 @@ ogs_pkbuf_pool_t *ogs_pkbuf_pool_create(ogs_pkbuf_config_t *config)
     ogs_pool_init(&pool->cluster_2048, config->cluster_2048_pool);
     ogs_pool_init(&pool->cluster_8192, config->cluster_8192_pool);
 
-    pool->config = config;
-
     return pool;
 }
 
 void ogs_pkbuf_pool_destroy(ogs_pkbuf_pool_t *pool)
 {
-    ogs_pkbuf_config_t *config;
     ogs_assert(pool);
-    config = pool->config;
-    ogs_assert(config);
 
     ogs_pool_final(&pool->pkbuf);
     ogs_pool_final(&pool->cluster);
@@ -167,15 +146,11 @@ void ogs_pkbuf_pool_destroy(ogs_pkbuf_pool_t *pool)
 
 ogs_pkbuf_t *ogs_pkbuf_alloc(ogs_pkbuf_pool_t *pool, unsigned int size)
 {
-    ogs_pkbuf_config_t *config = NULL;
     ogs_pkbuf_t *pkbuf = NULL;
     ogs_cluster_t *cluster = NULL;
 
     if (pool == NULL)
         pool = default_pool;
-
-    config = pool->config;
-    ogs_assert(config);
 
     ogs_thread_mutex_lock(&pool->mutex);
 
@@ -207,14 +182,11 @@ ogs_pkbuf_t *ogs_pkbuf_alloc(ogs_pkbuf_pool_t *pool, unsigned int size)
 void ogs_pkbuf_free(ogs_pkbuf_t *pkbuf)
 {
     ogs_pkbuf_pool_t *pool = NULL;
-    ogs_pkbuf_config_t *config = NULL;
     ogs_cluster_t *cluster = NULL;
     ogs_assert(pkbuf);
 
     pool = pkbuf->pool;
     ogs_assert(pool);
-    config = pool->config;
-    ogs_assert(config);
 
     cluster = pkbuf->cluster;
     ogs_assert(cluster);

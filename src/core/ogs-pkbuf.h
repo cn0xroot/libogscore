@@ -63,9 +63,7 @@ typedef struct ogs_pkbuf_config_s {
 void ogs_pkbuf_init(void);
 void ogs_pkbuf_final(void);
 
-ogs_pkbuf_config_t *ogs_pkbuf_config_new(void);
-void ogs_pkbuf_config_free(ogs_pkbuf_config_t *config);
-
+void ogs_pkbuf_config_default(ogs_pkbuf_config_t *config);
 ogs_pkbuf_pool_t *ogs_pkbuf_pool_create(ogs_pkbuf_config_t *config);
 void ogs_pkbuf_pool_destroy(ogs_pkbuf_pool_t *pool);
 
