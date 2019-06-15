@@ -39,6 +39,8 @@ typedef struct ogs_sockopt_s {
         int max_attempts;
         int max_initial_timeout;
     } sctp;
+
+    int nodelay;
 } ogs_sockopt_t;
 
 typedef struct ogs_pollset_s ogs_pollset_t;
