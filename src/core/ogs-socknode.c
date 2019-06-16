@@ -38,6 +38,8 @@ ogs_socknode_t *ogs_socknode_new(ogs_sockaddr_t *addr)
 
 void ogs_socknode_free(ogs_socknode_t *node)
 {
+    ogs_assert(node);
+
     ogs_freeaddrinfo(node->addr);
     if (node->pollin.poll)
         ogs_pollset_remove(node->pollin.poll);
