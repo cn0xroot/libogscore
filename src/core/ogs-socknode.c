@@ -254,6 +254,13 @@ void ogs_socknode_nodelay(ogs_socknode_t *node, int on)
     node->option.nodelay = on;
 }
 
+void ogs_socknode_linger(ogs_socknode_t *node, int onoff, int linger)
+{
+    ogs_assert(node);
+    node->option.l_onoff = onoff;
+    node->option.l_linger = linger;
+}
+
 void ogs_socknode_set_cleanup(
         ogs_socknode_t *node, void (*cleanup)(ogs_sock_t *))
 {

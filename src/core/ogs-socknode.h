@@ -41,6 +41,8 @@ typedef struct ogs_sockopt_s {
     } sctp;
 
     int nodelay;
+    int l_onoff;
+    int l_linger;;
 } ogs_sockopt_t;
 
 typedef struct ogs_pollset_s ogs_pollset_t;
@@ -78,6 +80,7 @@ int ogs_socknode_fill_scope_id_in_local(ogs_sockaddr_t *sa_list);
 
 void ogs_socknode_sctp_option(ogs_socknode_t *node, ogs_sockopt_t *option);
 void ogs_socknode_nodelay(ogs_socknode_t *node, int on);
+void ogs_socknode_linger(ogs_socknode_t *node, int onoff, int linger); 
 
 void ogs_socknode_set_cleanup(
         ogs_socknode_t *node, void (*cleanup)(ogs_sock_t *));
