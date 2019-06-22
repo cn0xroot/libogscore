@@ -1,3 +1,9 @@
+ogslib (1.0.2~xenial) xenial; urgency=medium
+
+  * Minor Fixed
+
+ -- Sukchan Lee <acetcom@gmail.com>  Sat, 22 Jun 2019 03:37:52 +0000
+
 ogslib (1.0.2~bionic) bionic; urgency=medium
 
   * Minor Fixed
