@@ -45,13 +45,13 @@ typedef struct ogs_tlv_s
     uint32_t type;
     uint32_t length;
     uint8_t instance;
-    void* value;
+    void *value;
 
     /* can be needed in encoding ogs_tlv_t*/
     bool buff_allocated;
     uint32_t buff_len;
-    uint8_t *buff_ptr;
-    uint8_t *buff;
+    void *buff_ptr;
+    void *buff;
 } ogs_tlv_t;
 
 #define ogs_tlv_type(pTlv) pTlv->type
@@ -60,9 +60,9 @@ typedef struct ogs_tlv_s
 #define ogs_tlv_value(pTlv) pTlv->value
 
 /* ogs_tlv_t pool related functions */
-ogs_tlv_t* ogs_tlv_get(void);
-void ogs_tlv_free(ogs_tlv_t *pTlv);
-void ogs_tlv_free_all(ogs_tlv_t *rootTlv);
+ogs_tlv_t *ogs_tlv_get(void);
+void ogs_tlv_free(ogs_tlv_t *tlv);
+void ogs_tlv_free_all(ogs_tlv_t *root);
 
 void ogs_tlv_init(void);
 void ogs_tlv_final(void);
@@ -70,26 +70,25 @@ void ogs_tlv_final(void);
 uint32_t ogs_tlv_pool_avail(void);
 
 /* ogs_tlv_t encoding functions */
-ogs_tlv_t* ogs_tlv_add(ogs_tlv_t *headTlv, 
-    uint32_t type, uint32_t length, uint8_t instance, uint8_t *value);
-ogs_tlv_t* ogs_tlv_copy(uint8_t *buff, uint32_t buff_len,
-    uint32_t type, uint32_t length, uint8_t instance, uint8_t *value);
-ogs_tlv_t* ogs_tlv_embed(ogs_tlv_t *parent_tlv, 
-    uint32_t type, uint32_t length, uint8_t instance, uint8_t *value);
+ogs_tlv_t *ogs_tlv_add(ogs_tlv_t *head, 
+    uint32_t type, uint32_t length, uint8_t instance, void *value);
+ogs_tlv_t *ogs_tlv_copy(void *buff, uint32_t buff_len,
+    uint32_t type, uint32_t length, uint8_t instance, void *value);
+ogs_tlv_t *ogs_tlv_embed(ogs_tlv_t *parent, 
+    uint32_t type, uint32_t length, uint8_t instance, void *value);
 
 uint32_t ogs_tlv_render(
-        ogs_tlv_t *rootTlv, uint8_t *blk, uint32_t length, uint8_t mode);
+        ogs_tlv_t *root, void *data, uint32_t length, uint8_t mode);
 
 /* ogs_tlv_t parsing functions */
-ogs_tlv_t* ogs_tlv_parse_block(
-        uint32_t length, uint8_t *blk, uint8_t mode);
-ogs_tlv_t* ogs_tlv_parse_embedded_block(ogs_tlv_t* pTlv, uint8_t mode);
+ogs_tlv_t *ogs_tlv_parse_block(uint32_t length, void *data, uint8_t mode);
+ogs_tlv_t *ogs_tlv_parse_embedded_block(ogs_tlv_t *tlv, uint8_t mode);
 
 /* tlv operation-related function */
-ogs_tlv_t* ogs_tlv_find(ogs_tlv_t* pTlv, uint32_t type);
-ogs_tlv_t* ogs_tlv_find_root(ogs_tlv_t* pTlv);
-uint32_t ogs_tlv_calc_length(ogs_tlv_t *p_tlv, uint8_t mode);
-uint32_t ogs_tlv_calc_count(ogs_tlv_t *p_tlv);
+ogs_tlv_t *ogs_tlv_find(ogs_tlv_t *root, uint32_t type);
+ogs_tlv_t *ogs_tlv_find_root(ogs_tlv_t *tlv);
+uint32_t ogs_tlv_calc_length(ogs_tlv_t *tlv, uint8_t mode);
+uint32_t ogs_tlv_calc_count(ogs_tlv_t *tlv);
 uint8_t ogs_tlv_value_8(ogs_tlv_t *tlv);
 uint16_t ogs_tlv_value_16(ogs_tlv_t *tlv);
 uint32_t ogs_tlv_value_32(ogs_tlv_t *tlv);

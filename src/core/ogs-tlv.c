@@ -25,7 +25,7 @@
 static OGS_POOL(pool, ogs_tlv_t);
 
 /* ogs_tlv_t common functions */
-ogs_tlv_t* ogs_tlv_get(void)
+ogs_tlv_t *ogs_tlv_get(void)
 {
     ogs_tlv_t *tlv = NULL;
 
@@ -36,14 +36,14 @@ ogs_tlv_t* ogs_tlv_get(void)
     ogs_assert(tlv);
 
     /* intialize tlv node */
-    memset((char*)tlv, 0x00, sizeof(ogs_tlv_t));
+    memset(tlv, 0, sizeof(ogs_tlv_t));
     return tlv;
 }
 
-void ogs_tlv_free(ogs_tlv_t *p_tlv)
+void ogs_tlv_free(ogs_tlv_t *tlv)
 {
     /* free tlv node to the node pool */
-    ogs_pool_free(&pool, p_tlv);
+    ogs_pool_free(&pool, tlv);
 }
 
 void ogs_tlv_init(void)
@@ -61,20 +61,19 @@ uint32_t ogs_tlv_pool_avail(void)
     return ogs_pool_avail(&pool);
 }
 
-void ogs_tlv_free_all(ogs_tlv_t *root_tlv)
+void ogs_tlv_free_all(ogs_tlv_t *root)
 {
     /* free all tlv node to the node pool */
-    ogs_tlv_t *p_tlv = root_tlv;
+    ogs_tlv_t *iter = root;
     ogs_tlv_t *next = NULL;
-    while(p_tlv) {
-        if(p_tlv->embedded != NULL) {
-            ogs_tlv_free_all(p_tlv->embedded);
+    while (iter) {
+        if(iter->embedded != NULL) {
+            ogs_tlv_free_all(iter->embedded);
         }
-        next = p_tlv->next;
-        ogs_tlv_free(p_tlv);
-        p_tlv = next;
+        next = iter->next;
+        ogs_tlv_free(iter);
+        iter = next;
     }
-    return;
 }
 
 uint8_t ogs_tlv_value_8(ogs_tlv_t *tlv)
@@ -106,12 +105,12 @@ uint32_t ogs_tlv_value_32(ogs_tlv_t *tlv)
     return u_32;
 }
 
-uint32_t ogs_tlv_calc_length(ogs_tlv_t *p_tlv, uint8_t mode)
+uint32_t ogs_tlv_calc_length(ogs_tlv_t *tlv, uint8_t mode)
 {
-    ogs_tlv_t *tmp_tlv = p_tlv;
+    ogs_tlv_t *iter = tlv;
     uint32_t length = 0;
 
-    while(tmp_tlv) {
+    while(iter) {
         /* this is length for type field */
         switch(mode) {
         case OGS_TLV_MODE_T1_L1:
@@ -130,30 +129,30 @@ uint32_t ogs_tlv_calc_length(ogs_tlv_t *p_tlv, uint8_t mode)
         }
 
         /* this is length for type field */
-        if(tmp_tlv->embedded != NULL) {
-            tmp_tlv->length = ogs_tlv_calc_length(tmp_tlv->embedded, mode);
+        if(iter->embedded != NULL) {
+            iter->length = ogs_tlv_calc_length(iter->embedded, mode);
         }
 
         /* this is length for value field */
-        length += tmp_tlv->length;
+        length += iter->length;
 
-        tmp_tlv = tmp_tlv->next;
+        iter = iter->next;
     }
     return length;
 }
 
-uint32_t ogs_tlv_calc_count(ogs_tlv_t *p_tlv)
+uint32_t ogs_tlv_calc_count(ogs_tlv_t *tlv)
 {
-    ogs_tlv_t *tmp_tlv = p_tlv;
+    ogs_tlv_t *iter = tlv;
     uint32_t count = 0;
 
-    while(tmp_tlv) {
-        if(tmp_tlv->embedded != NULL) {
-            count += ogs_tlv_calc_count(tmp_tlv->embedded);
+    while(iter) {
+        if(iter->embedded != NULL) {
+            count += ogs_tlv_calc_count(iter->embedded);
         } else {
             count++;
         }
-        tmp_tlv = tmp_tlv->next;
+        iter = iter->next;
     }
     return count;
 }
@@ -210,252 +209,252 @@ static uint8_t *tlv_put_instance(uint8_t instance, uint8_t *pos, uint8_t mode)
     return pos;
 }
 
-static uint8_t *tlv_get_element(ogs_tlv_t *p_tlv, uint8_t *tlvBlock, uint8_t mode)
+static uint8_t *tlv_get_element(ogs_tlv_t *tlv, uint8_t *blk, uint8_t mode)
 {
-    uint8_t *pos = tlvBlock;
+    uint8_t *pos = blk;
 
     switch(mode) {
     case OGS_TLV_MODE_T1_L1:
-        p_tlv->type = *(pos++);
-        p_tlv->length = *(pos++);
+        tlv->type = *(pos++);
+        tlv->length = *(pos++);
         break;
     case OGS_TLV_MODE_T1_L2:
-        p_tlv->type = *(pos++);
-        p_tlv->length = *(pos++) << 8;
-        p_tlv->length += *(pos++);
+        tlv->type = *(pos++);
+        tlv->length = *(pos++) << 8;
+        tlv->length += *(pos++);
         break;
     case OGS_TLV_MODE_T1_L2_I1:
-        p_tlv->type = *(pos++);
-        p_tlv->length = *(pos++) << 8;
-        p_tlv->length += *(pos++);
-        p_tlv->instance = *(pos++);
+        tlv->type = *(pos++);
+        tlv->length = *(pos++) << 8;
+        tlv->length += *(pos++);
+        tlv->instance = *(pos++);
         break;
     case OGS_TLV_MODE_T2_L2:
-        p_tlv->type = *(pos++) << 8;
-        p_tlv->type += *(pos++);
-        p_tlv->length = *(pos++) << 8;
-        p_tlv->length += *(pos++);
+        tlv->type = *(pos++) << 8;
+        tlv->type += *(pos++);
+        tlv->length = *(pos++) << 8;
+        tlv->length += *(pos++);
         break;
     default:
         ogs_assert_if_reached();
         break;
     }
 
-    p_tlv->value = pos;
+    tlv->value = pos;
 
-    return (pos + ogs_tlv_length(p_tlv));
+    return (pos + ogs_tlv_length(tlv));
 }
 
 static void tlv_alloc_buff_to_tlv(
-        ogs_tlv_t* head_tlv, uint8_t* buff, uint32_t buff_len)
+        ogs_tlv_t *head, uint8_t *buff, uint32_t buff_len)
 {
-    head_tlv->buff_allocated = true;
-    head_tlv->buff_len = buff_len;
-    head_tlv->buff_ptr = buff;
-    head_tlv->buff = buff;
+    head->buff_allocated = true;
+    head->buff_len = buff_len;
+    head->buff_ptr = buff;
+    head->buff = buff;
 }
 
-ogs_tlv_t *ogs_tlv_find_root(ogs_tlv_t* p_tlv)
+ogs_tlv_t *ogs_tlv_find_root(ogs_tlv_t *tlv)
 {
-    ogs_tlv_t *head_tlv = p_tlv->head;
-    ogs_tlv_t *parentTlv;
+    ogs_tlv_t *head = tlv->head;
+    ogs_tlv_t *parent;
 
-    parentTlv = head_tlv->parent;
-    while(parentTlv) {
-        head_tlv = parentTlv->head;
-        parentTlv = head_tlv->parent;
+    parent = head->parent;
+    while(parent) {
+        head = parent->head;
+        parent = head->parent;
     }
 
-    return head_tlv;
+    return head;
 }
 
-ogs_tlv_t *ogs_tlv_add(ogs_tlv_t *head_tlv, 
-    uint32_t type, uint32_t length, uint8_t instance, uint8_t *value)
+ogs_tlv_t *ogs_tlv_add(ogs_tlv_t *head, 
+    uint32_t type, uint32_t length, uint8_t instance, void *value)
 {
-    ogs_tlv_t* curr_tlv = head_tlv;
-    ogs_tlv_t* new_tlv = NULL;
+    ogs_tlv_t *curr = head;
+    ogs_tlv_t *new = NULL;
 
-    new_tlv = ogs_tlv_get();
-    ogs_assert(new_tlv);
+    new = ogs_tlv_get();
+    ogs_assert(new);
     if(length != 0)
         ogs_assert(value);
 
-    new_tlv->type = type;
-    new_tlv->length = length;
-    new_tlv->instance = instance;
-    new_tlv->value = value;
+    new->type = type;
+    new->length = length;
+    new->instance = instance;
+    new->value = value;
 
-    if (head_tlv != NULL && head_tlv->buff_allocated == true) {
-        ogs_assert((head_tlv->buff_ptr - head_tlv->buff + length) < 
-                head_tlv->buff_len);
+    if (head != NULL && head->buff_allocated == true) {
+        ogs_assert((head->buff_ptr - head->buff + length) < head->buff_len);
 
-        memcpy(head_tlv->buff_ptr, value, length);
-        new_tlv->value = head_tlv->buff_ptr;
-        head_tlv->buff_ptr += length;
+        memcpy(head->buff_ptr, value, length);
+        new->value = head->buff_ptr;
+        head->buff_ptr += length;
     }
 
-    if(curr_tlv == NULL) {
-        new_tlv->head = new_tlv;
-        new_tlv->tail = new_tlv;
+    if(curr == NULL) {
+        new->head = new;
+        new->tail = new;
     } else {
-        head_tlv = head_tlv->head; /* in case head_tlv is not head */
-        new_tlv->head = head_tlv;
-        head_tlv->tail->next = new_tlv;
-        head_tlv->tail = new_tlv;
+        head = head->head; /* in case head is not head */
+        new->head = head;
+        head->tail->next = new;
+        head->tail = new;
     }
-    return new_tlv;
+    return new;
 }
 
-ogs_tlv_t *ogs_tlv_copy(uint8_t *buff, uint32_t buff_len,
-    uint32_t type, uint32_t length, uint8_t instance, uint8_t *value)
+ogs_tlv_t *ogs_tlv_copy(void *buff, uint32_t buff_len,
+    uint32_t type, uint32_t length, uint8_t instance, void *value)
 {
-    ogs_tlv_t* new_tlv = NULL;
+    ogs_tlv_t *new = NULL;
 
-    new_tlv = ogs_tlv_get();
-    ogs_assert(new_tlv);
+    new = ogs_tlv_get();
+    ogs_assert(new);
 
-    new_tlv->type = type;
-    new_tlv->length = length;
-    new_tlv->instance = instance;
-    new_tlv->value = value;
-    new_tlv->head = new_tlv->tail = new_tlv;
+    new->type = type;
+    new->length = length;
+    new->instance = instance;
+    new->value = value;
+    new->head = new->tail = new;
 
-    tlv_alloc_buff_to_tlv(new_tlv, buff, buff_len);
+    tlv_alloc_buff_to_tlv(new, buff, buff_len);
 
-    memcpy(new_tlv->buff_ptr, value, length);
-    new_tlv->value = new_tlv->buff_ptr;
-    new_tlv->buff_ptr += length;
+    memcpy(new->buff_ptr, value, length);
+    new->value = new->buff_ptr;
+    new->buff_ptr += length;
 
-    return new_tlv;
+    return new;
 }
 
-ogs_tlv_t *ogs_tlv_embed(ogs_tlv_t *parent_tlv, 
-    uint32_t type, uint32_t length, uint8_t instance, uint8_t *value)
+ogs_tlv_t *ogs_tlv_embed(ogs_tlv_t *parent, 
+    uint32_t type, uint32_t length, uint8_t instance, void *value)
 {
-    ogs_tlv_t* new_tlv = NULL, *root_tlv = NULL;
+    ogs_tlv_t *new = NULL, *root = NULL;
 
-    ogs_assert(parent_tlv);
+    ogs_assert(parent);
 
-    new_tlv = ogs_tlv_get();
-    ogs_assert(new_tlv);
+    new = ogs_tlv_get();
+    ogs_assert(new);
 
-    new_tlv->type = type;
-    new_tlv->length = length;
-    new_tlv->instance = instance;
-    new_tlv->value = value;
+    new->type = type;
+    new->length = length;
+    new->instance = instance;
+    new->value = value;
 
-    root_tlv = ogs_tlv_find_root(parent_tlv);
+    root = ogs_tlv_find_root(parent);
 
-    if(root_tlv->buff_allocated == true) {
-        ogs_assert((root_tlv->buff_ptr - root_tlv->buff + length) < 
-                root_tlv->buff_len);
+    if(root->buff_allocated == true) {
+        ogs_assert((root->buff_ptr - root->buff + length) < root->buff_len);
 
-        memcpy(root_tlv->buff_ptr, value, length);
-        new_tlv->value = root_tlv->buff_ptr;
-        root_tlv->buff_ptr += length;
+        memcpy(root->buff_ptr, value, length);
+        new->value = root->buff_ptr;
+        root->buff_ptr += length;
     }
 
-    if(parent_tlv->embedded == NULL) {
-        parent_tlv->embedded = new_tlv->head = new_tlv->tail = new_tlv;
-        new_tlv->parent = parent_tlv;
+    if(parent->embedded == NULL) {
+        parent->embedded = new->head = new->tail = new;
+        new->parent = parent;
     } else {
-        new_tlv->head = parent_tlv->embedded;
-        parent_tlv->embedded->tail->next = new_tlv;
-        parent_tlv->embedded->tail = new_tlv;
+        new->head = parent->embedded;
+        parent->embedded->tail->next = new;
+        parent->embedded->tail = new;
     }
 
-    return new_tlv;
+    return new;
 }
 
-uint32_t ogs_tlv_render(ogs_tlv_t *root_tlv, 
-    uint8_t *blk, uint32_t length, uint8_t mode)
+uint32_t ogs_tlv_render(ogs_tlv_t *root, 
+    void *data, uint32_t length, uint8_t mode)
 {
-    ogs_tlv_t* curr_tlv = root_tlv;
-    uint8_t* pos = blk;
+    ogs_tlv_t *curr = root;
+    uint8_t *pos = data;
+    uint8_t *blk = data;
     uint32_t embedded_len = 0;
 
-    while(curr_tlv) {
-        pos = tlv_put_type(curr_tlv->type, pos, mode);
+    while(curr) {
+        pos = tlv_put_type(curr->type, pos, mode);
 
-        if(curr_tlv->embedded == NULL) {
-            pos = tlv_put_length(curr_tlv->length, pos, mode);
-            pos = tlv_put_instance(curr_tlv->instance, pos, mode);
+        if(curr->embedded == NULL) {
+            pos = tlv_put_length(curr->length, pos, mode);
+            pos = tlv_put_instance(curr->instance, pos, mode);
 
-            if ((pos - blk) + ogs_tlv_length(curr_tlv) > length)
+            if ((pos - blk) + ogs_tlv_length(curr) > length)
                 ogs_assert_if_reached();
 
-            memcpy((char*)pos, (char*)curr_tlv->value, curr_tlv->length);
-            pos += curr_tlv->length;
+            memcpy((char*)pos, (char*)curr->value, curr->length);
+            pos += curr->length;
         } else {
-            embedded_len = ogs_tlv_calc_length(curr_tlv->embedded, mode);
+            embedded_len = ogs_tlv_calc_length(curr->embedded, mode);
             pos = tlv_put_length(embedded_len, pos, mode);
-            pos = tlv_put_instance(curr_tlv->instance, pos, mode);
-            ogs_tlv_render(curr_tlv->embedded,
+            pos = tlv_put_instance(curr->instance, pos, mode);
+            ogs_tlv_render(curr->embedded,
                 pos, length - (uint32_t)(pos-blk), mode);
             pos += embedded_len;
         }
-        curr_tlv = curr_tlv->next;
+        curr = curr->next;
     }
 
     return (pos - blk);
 }
 
 /* ogs_tlv_t parsing functions */
-ogs_tlv_t *ogs_tlv_parse_block(uint32_t length, uint8_t *blk, uint8_t mode)
+ogs_tlv_t *ogs_tlv_parse_block(uint32_t length, void *data, uint8_t mode)
 {
-    uint8_t* pos = blk;
+    uint8_t *pos = data;
+    uint8_t *blk = data;
 
-    ogs_tlv_t* root_tlv = NULL;
-    ogs_tlv_t* prev_tlv = NULL;
-    ogs_tlv_t* curr_tlv = NULL;
+    ogs_tlv_t *root = NULL;
+    ogs_tlv_t *prev = NULL;
+    ogs_tlv_t *curr = NULL;
 
-    root_tlv = curr_tlv = ogs_tlv_get();
+    root = curr = ogs_tlv_get();
 
-    ogs_assert(curr_tlv);
+    ogs_assert(curr);
 
-    pos = tlv_get_element(curr_tlv, pos, mode);
+    pos = tlv_get_element(curr, pos, mode);
 
     ogs_assert(pos);
 
     while(pos - blk < length) {
-        prev_tlv = curr_tlv;
+        prev = curr;
 
-        curr_tlv = ogs_tlv_get();
-        ogs_assert(curr_tlv);
-        prev_tlv->next = curr_tlv;
+        curr = ogs_tlv_get();
+        ogs_assert(curr);
+        prev->next = curr;
 
-        pos = tlv_get_element(curr_tlv, pos, mode);
+        pos = tlv_get_element(curr, pos, mode);
         ogs_assert(pos);
     }
 
     ogs_assert(length == (pos - blk));
 
-    return root_tlv;
+    return root;
 }
 
-ogs_tlv_t *ogs_tlv_parse_embedded_block(ogs_tlv_t* p_tlv, uint8_t mode)
+ogs_tlv_t *ogs_tlv_parse_embedded_block(ogs_tlv_t *tlv, uint8_t mode)
 {
-    p_tlv->embedded = ogs_tlv_parse_block(p_tlv->length, p_tlv->value, mode);
+    tlv->embedded = ogs_tlv_parse_block(tlv->length, tlv->value, mode);
 
-    return p_tlv->embedded;
+    return tlv->embedded;
 }
 
 /* tlv operation-related function */
-ogs_tlv_t *ogs_tlv_find(ogs_tlv_t* p_tlv, uint32_t type)
+ogs_tlv_t *ogs_tlv_find(ogs_tlv_t *root, uint32_t type)
 {
-    ogs_tlv_t *tmp_tlv = p_tlv, *embed_tlv = NULL;
-    while(tmp_tlv) {
-        if(tmp_tlv->type == type) {
-            return tmp_tlv;
+    ogs_tlv_t *iter = root, *embed = NULL;
+    while(iter) {
+        if(iter->type == type) {
+            return iter;
         }
 
-        if(tmp_tlv->embedded != NULL) {
-            embed_tlv = ogs_tlv_find(tmp_tlv->embedded, type);
-            if(embed_tlv != NULL) {
-                return embed_tlv;
+        if(iter->embedded != NULL) {
+            embed = ogs_tlv_find(iter->embedded, type);
+            if(embed != NULL) {
+                return embed;
             }
         }
-        tmp_tlv = tmp_tlv->next;
+        iter = iter->next;
     }
 
     /* tlv for the designated type doesn't exist */
