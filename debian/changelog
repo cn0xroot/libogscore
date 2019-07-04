@@ -1,3 +1,9 @@
+ogslib (1.1.0) unstable; urgency=medium
+
+  * Debian package name changed
+
+ -- Sukchan Lee <acetcom@gmail.com>  Thu, 04 Jul 2019 11:39:34 +0000
+
 ogslib (1.0.2~xenial) xenial; urgency=medium
 
   * Minor Fixed

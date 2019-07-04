@@ -14,7 +14,7 @@ Homepage: https://open5gs.org/
 Vcs-Git: https://github.com/open5gs/ogslib.git
 Vcs-Browser: https://github.com/open5gs/ogslib/tree/master
 
-Package: ogscore-1.0-0
+Package: libogscore-1.0-0
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends}
@@ -25,7 +25,7 @@ Description: OGSLib Core Library
  This package contains the minimal runtime library for applications
  that have been built with OGSLib.
 
-Package: ogscrypt-1.0-0
+Package: libogscrypt-1.0-0
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends}
@@ -36,13 +36,13 @@ Description: OGSLib Crypt Library
  This package contains the minimal runtime libraries for applications
  that have been built with OGSLib.
 
-Package: ogslib
+Package: libogslib
 Section: libs
 Architecture: any
 Multi-Arch: same
 Depends: ${misc:Depends},
-         ogscore-1.0-0 (= ${binary:Version}),
-         ogscrypt-1.0-0 (= ${binary:Version})
+         libogscore-1.0-0 (= ${binary:Version}),
+         libogscrypt-1.0-0 (= ${binary:Version})
 Description: OGSLib - Open5GS Library (metapackage)
  OGSLib provides various utility functions in an OS-independent manner.
  It also includes functions used in cellular communication network programs.
@@ -50,11 +50,11 @@ Description: OGSLib - Open5GS Library (metapackage)
  This package contains the minimal runtime libraries for applications that
  have been built with OGSLib.
 
-Package: ogslib-dev
+Package: libogslib-dev
 Section: libdevel
 Architecture: any
 Depends: ${misc:Depends},
-         ogslib (= ${binary:Version})
+         libogslib (= ${binary:Version})
 Description: Development headers for OGSLib - Open5GS Library
  OGSLib provides a variety of utility functions in an OS-independent manner.
  It also includes functions used in cellular communication network programs.
@@ -62,11 +62,11 @@ Description: Development headers for OGSLib - Open5GS Library
  This package contains all the files necessary to develop applications
  that use OGSLib.
 
-Package: ogslib-dbg
+Package: libogslib-dbg
 Section: debug
 Architecture: any
 Depends: ${misc:Depends},
-         ogslib (= ${binary:Version})
+         libogslib (= ${binary:Version})
 Description: Debug symbols for OGSLib - Open5GS Library
  OGSLib provides various utility functions in an OS-independent manner.
  It also includes functions used in cellular communication network programs.

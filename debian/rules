@@ -15,7 +15,7 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 	dh $@ --with autoreconf
 
 override_dh_strip:
-	dh_strip --dbg-package=ogslib-dbg
+	dh_strip --dbg-package=libogslib-dbg
 
 #override_dh_auto_test:
 #	tests/core/testcore -dthread -x sctp-test || exit;
