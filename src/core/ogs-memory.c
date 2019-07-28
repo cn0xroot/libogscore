@@ -95,7 +95,8 @@ void *ogs_realloc(void *ptr, size_t size)
         ogs_pkbuf_free(pkbuf);
         return new;
     } else {
-        ogs_pkbuf_trim(pkbuf, size);
+        pkbuf->tail = pkbuf->data + size;
+        pkbuf->len = size;
         return ptr;
     }
 }
