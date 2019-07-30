@@ -1,3 +1,9 @@
+ogslib (1.2.0) unstable; urgency=medium
+
+  * Fix the BUG of ogs_realloc()
+
+ -- Sukchan Lee <acetcom@gmail.com>  Tue, 30 Jul 2019 21:32:18 +0900
+
 ogslib (1.1.0~bionic) bionic; urgency=medium
 
   * Debian package name changed
