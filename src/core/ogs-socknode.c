@@ -131,7 +131,7 @@ int ogs_socknode_probe(
 
 #ifndef IN_IS_ADDR_LOOPBACK
 #define IN_IS_ADDR_LOOPBACK(a) \
-  ((((long int) (a)->s_addr) & ntohl(0xff000000)) == ntohl(0x7f000000))
+  ((((long int) (a)->s_addr) & be32toh(0xff000000)) == be32toh(0x7f000000))
 #endif /* IN_IS_ADDR_LOOPBACK */
 
 /* An IP equivalent to IN6_IS_ADDR_UNSPECIFIED */
@@ -156,7 +156,7 @@ int ogs_socknode_probe(
 
         addr = ogs_calloc(1, sizeof(ogs_sockaddr_t));
         memcpy(&addr->sa, cur->ifa_addr, ogs_sockaddr_len(cur->ifa_addr));
-        addr->ogs_sin_port = htons(port);
+        addr->ogs_sin_port = htobe16(port);
 
         node = ogs_calloc(1, sizeof(ogs_socknode_t));
         node->addr = addr;

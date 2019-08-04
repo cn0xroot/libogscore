@@ -562,9 +562,9 @@ static void test5_func(abts_case *tc, void *data)
     uint8_t mode = (uintptr_t)data;
 
     /* tlv encoding for test */
-    c_16 = htons(c_16);
+    c_16 = htobe16(c_16);
     root_tlv = ogs_tlv_add(NULL, 10, 2, 0, (uint8_t*)&c_16);
-    c_32 = htonl(c_32);
+    c_32 = htobe32(c_32);
     ogs_tlv_add(root_tlv, 20, 4, 0, (uint8_t*)&c_32);
 
     memset(parent_block, 0x00, sizeof(parent_block));

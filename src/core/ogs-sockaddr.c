@@ -81,7 +81,7 @@ int ogs_addaddrinfo(ogs_sockaddr_t **sa_list,
 
         new = ogs_calloc(1, sizeof(ogs_sockaddr_t));
         memcpy(&new->sa, ai->ai_addr, ai->ai_addrlen);
-        new->ogs_sin_port = htons(port);
+        new->ogs_sin_port = htobe16(port);
         ogs_trace("addr:%s, port:%d", OGS_ADDR(new, buf), port);
 
         if (!prev)
@@ -387,8 +387,8 @@ static int parse_network(ogs_ipsubnet_t *ipsub, const char *network)
         s = t;
         shift -= 8;
     }
-    ipsub->sub[0] = ntohl(ipsub->sub[0]);
-    ipsub->mask[0] = ntohl(ipsub->mask[0]);
+    ipsub->sub[0] = be32toh(ipsub->sub[0]);
+    ipsub->mask[0] = be32toh(ipsub->mask[0]);
     ipsub->family = AF_INET;
 
     return OGS_OK;
@@ -528,7 +528,7 @@ int ogs_ipsubnet(ogs_ipsubnet_t *ipsub,
                 --bits;
                 cur_bit_value /= 2;
             }
-            ipsub->mask[cur_entry] = htonl(ipsub->mask[cur_entry]);
+            ipsub->mask[cur_entry] = htobe32(ipsub->mask[cur_entry]);
         }
         else if (inet_pton(AF_INET, mask_or_numbits, ipsub->mask) == 1 &&
             ipsub->family == AF_INET) {

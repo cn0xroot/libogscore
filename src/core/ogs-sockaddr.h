@@ -79,7 +79,7 @@ int ogs_filter_ip_version(ogs_sockaddr_t **addr,
 #define OGS_ADDR(__aDDR, __bUF) \
     ogs_inet_ntop(__aDDR, __bUF, OGS_ADDRSTRLEN)
 #define OGS_PORT(__aDDR) \
-    ntohs((__aDDR)->ogs_sin_port)
+    be16toh((__aDDR)->ogs_sin_port)
 const char *ogs_inet_ntop(void *addr, char *buf, int buflen);
 int ogs_inet_pton(int family, const char *src, void *addr);
 

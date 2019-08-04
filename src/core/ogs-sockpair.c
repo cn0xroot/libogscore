@@ -44,7 +44,7 @@ int ogs_socketpair(int family, int type, int protocol, ogs_socket_t fd[2])
 
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+    server_addr.sin_addr.s_addr = htobe32(INADDR_LOOPBACK);
     server_addr.sin_port = 0;
 
     rc = bind(server, (struct sockaddr *)&server_addr, sizeof(server_addr));
