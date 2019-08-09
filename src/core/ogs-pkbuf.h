@@ -50,20 +50,22 @@ typedef struct ogs_pkbuf_s {
 } ogs_pkbuf_t;
 
 typedef struct ogs_pkbuf_config_s {
-    int pkbuf_pool;
-    int cluster_pool;
     int cluster_128_pool;
     int cluster_256_pool;
     int cluster_512_pool;
     int cluster_1024_pool;
     int cluster_2048_pool;
     int cluster_8192_pool;
+    int cluster_big_pool;
 } ogs_pkbuf_config_t;
 
 void ogs_pkbuf_init(void);
 void ogs_pkbuf_final(void);
 
-void ogs_pkbuf_config_default(ogs_pkbuf_config_t *config);
+void ogs_pkbuf_default_init(ogs_pkbuf_config_t *config);
+void ogs_pkbuf_default_create(ogs_pkbuf_config_t *config);
+void ogs_pkbuf_default_destroy(void);
+
 ogs_pkbuf_pool_t *ogs_pkbuf_pool_create(ogs_pkbuf_config_t *config);
 void ogs_pkbuf_pool_destroy(ogs_pkbuf_pool_t *pool);
 

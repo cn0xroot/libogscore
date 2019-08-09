@@ -32,12 +32,19 @@ const struct testlist {
     {NULL},
 };
 
+static void terminate(void)
+{
+    ogs_pkbuf_default_destroy();
+    ogs_core_finalize();
+}
+
 int main(int argc, const char **argv)
 {
     int i;
     int debug = 0, trace = 0;
     const char *debug_mask = NULL, *trace_mask = NULL;
     abts_suite *suite = NULL;
+    ogs_pkbuf_config_t config;
 
     abts_init(argc, argv);
 
@@ -64,7 +71,9 @@ int main(int argc, const char **argv)
     }
 
     ogs_core_initialize();
-    atexit(ogs_core_finalize);
+    ogs_pkbuf_default_init(&config);
+    ogs_pkbuf_default_create(&config);
+    atexit(terminate);
 
     if (debug)
         ogs_log_set_mask_level(debug_mask, OGS_LOG_DEBUG);
