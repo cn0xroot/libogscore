@@ -1,3 +1,9 @@
+ogslib (1.2.1-1~disco) disco; urgency=medium
+
+  * Test for Disco
+
+ -- Sukchan Lee <acetcom@gmail.com>  Sun, 11 Aug 2019 12:57:27 +0000
+
 ogslib (1.2.1-1~xenial) xenial; urgency=medium
 
   * Add Configurable Memory Pool Size
