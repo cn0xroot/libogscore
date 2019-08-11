@@ -1,3 +1,9 @@
+ogslib (1.2.1) unstable; urgency=medium
+
+  * Add Configurable Memory Pool Size
+
+ -- Sukchan Lee <acetcom@gmail.com>  Sun, 11 Aug 2019 11:13:50 +0000
+
 ogslib (1.2.0~xenial) xenial; urgency=medium
 
   * Fix the BUG of ogs_realloc()
