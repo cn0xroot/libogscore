@@ -21,6 +21,17 @@
 
 #if HAVE_SIGACTION
 
+#if defined(__NetBSD__) || defined(DARWIN)
+static void avoid_zombies(int signo)
+{
+    int exit_status;
+
+    while (waitpid(-1, &exit_status, WNOHANG) > 0) {
+        /* do nothing */
+    }
+}
+#endif /* DARWIN */
+
 /*
  * Replace standard signal() with the more reliable sigaction equivalent
  * from W. Richard Stevens' "Advanced Programming in the UNIX Environment"
@@ -35,6 +46,25 @@ ogs_sigfunc_t *ogs_signal(int signo, ogs_sigfunc_t *func)
     act.sa_flags = 0;
 #ifdef SA_INTERRUPT             /* SunOS */
     act.sa_flags |= SA_INTERRUPT;
+#endif
+#if defined(__osf__) && defined(__alpha)
+    /* XXX jeff thinks this should be enabled whenever SA_NOCLDWAIT is defined */
+
+    /* this is required on Tru64 to cause child processes to
+     * disappear gracefully - XPG4 compatible 
+     */
+    if ((signo == SIGCHLD) && (func == SIG_IGN)) {
+        act.sa_flags |= SA_NOCLDWAIT;
+    }
+#endif
+#if defined(__NetBSD__) || defined(DARWIN)
+    /* ignoring SIGCHLD or leaving the default disposition doesn't avoid zombies,
+     * and there is no SA_NOCLDWAIT flag, so catch the signal and reap status in 
+     * the handler to avoid zombies
+     */
+    if ((signo == SIGCHLD) && (func == SIG_IGN)) {
+        act.sa_handler = avoid_zombies;
+    }
 #endif
     if (sigaction(signo, &act, &oact) < 0)
         return SIG_ERR;
