@@ -28,6 +28,46 @@
 extern "C" {
 #endif
 
+/*
+ * The following code is stolen from process.h
+ * https://github.com/sheredom/process.h
+ */
+
+#if defined(_WIN32)
+typedef struct _PROCESS_INFORMATION *LPPROCESS_INFORMATION;
+typedef struct _SECURITY_ATTRIBUTES *LPSECURITY_ATTRIBUTES;
+typedef struct _STARTUPINFOA *LPSTARTUPINFOA;
+
+__declspec(dllimport) int __stdcall SetHandleInformation(void *, unsigned long,
+                                                         unsigned long);
+__declspec(dllimport) int __stdcall CreatePipe(void **, void **,
+                                               LPSECURITY_ATTRIBUTES,
+                                               unsigned long);
+__declspec(dllimport) int __stdcall CreateProcessA(
+    const char *, char *, LPSECURITY_ATTRIBUTES, LPSECURITY_ATTRIBUTES, int,
+    unsigned long, void *, const char *, LPSTARTUPINFOA, LPPROCESS_INFORMATION);
+__declspec(dllimport) int __stdcall CloseHandle(void *);
+__declspec(dllimport) unsigned long __stdcall WaitForSingleObject(
+    void *, unsigned long);
+__declspec(dllimport) int __stdcall GetExitCodeProcess(
+    void *, unsigned long *lpExitCode);
+__declspec(dllimport) int __cdecl _open_osfhandle(intptr_t, int);
+void *__cdecl _alloca(size_t);
+#endif
+
+typedef struct ogs_proc_s {
+    FILE *stdin_file;
+    FILE *stdout_file;
+    FILE *stderr_file;
+
+#if defined(_WIN32)
+    void *hProcess;
+    unsigned long dwProcessId;
+#else
+    pid_t child;
+#endif
+} ogs_proc_t;
+
 #if !defined(_WIN32)
 typedef sem_t ogs_proc_mutex_t;
 #define ogs_proc_mutex_wait sem_wait
@@ -36,6 +76,27 @@ typedef sem_t ogs_proc_mutex_t;
 #else
 typedef HANDLE ogs_proc_mutex_t;
 #endif
+
+enum ogs_proc_option_e {
+    // stdout and stderr are the same FILE.
+    ogs_proc_option_combined_stdout_stderr = 0x1,
+
+    // The child process should inherit the environment variables of the parent.
+    ogs_proc_option_inherit_environment = 0x2
+};
+
+int ogs_proc_create(const char *const command_line[], int options,
+                    ogs_proc_t *const out_process);
+
+FILE *ogs_proc_stdin(const ogs_proc_t *const process);
+FILE *ogs_proc_stdout(const ogs_proc_t *const process);
+FILE *ogs_proc_stderr(const ogs_proc_t *const process);
+
+int ogs_proc_join(ogs_proc_t *const process, int *const out_return_code);
+int ogs_proc_destroy(ogs_proc_t *const process);
+
+int ogs_proc_terminate(ogs_proc_t *const process);
+int ogs_proc_kill(ogs_proc_t *const process);
 
 ogs_proc_mutex_t *ogs_proc_mutex_create(int value);
 int ogs_proc_mutex_timedwait(ogs_proc_mutex_t *mutex, ogs_time_t timeout);
