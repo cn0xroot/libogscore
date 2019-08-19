@@ -160,15 +160,18 @@ ogs_log_t *ogs_log_add_stderr(void)
 
 ogs_log_t *ogs_log_add_file(const char *name)
 {
+    FILE *out = NULL;
     ogs_log_t *log = NULL;
+
+    out = fopen(name, "a");
+    if (!out) 
+        return NULL;
     
     log = add_log(OGS_LOG_FILE_TYPE);
     ogs_assert(log);
 
     log->file.name = name;
-
-    log->file.out = fopen(name, "a");
-    ogs_assert(log->file.out);
+    log->file.out = out;
 
     log->writer = file_writer;
 
@@ -570,3 +573,19 @@ static void file_writer(
     fprintf(log->file.out, "%s", string);
     fflush(log->file.out);
 }
+
+ogs_log_level_e ogs_log_level_from_string(const char *string)
+{
+    ogs_log_level_e level = OGS_ERROR;
+
+    if (!strcasecmp(string, "none")) level = OGS_LOG_NONE;
+    else if (!strcasecmp(string, "fatal")) level = OGS_LOG_FATAL;
+    else if (!strcasecmp(string, "error")) level = OGS_LOG_ERROR;
+    else if (!strcasecmp(string, "warn")) level = OGS_LOG_WARN;
+    else if (!strcasecmp(string, "info")) level = OGS_LOG_INFO;
+    else if (!strcasecmp(string, "debug")) level = OGS_LOG_DEBUG;
+    else if (!strcasecmp(string, "trace")) level = OGS_LOG_TRACE;
+
+    return level;
+}
+

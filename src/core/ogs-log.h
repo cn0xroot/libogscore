@@ -100,6 +100,8 @@ void ogs_log_printf(ogs_log_level_e level, int domain_id,
 void ogs_log_hexdump_func(ogs_log_level_e level, int domain_id,
     const unsigned char *data, size_t len);
 
+ogs_log_level_e ogs_log_level_from_string(const char *string);
+
 #undef OGS_DISABLE_ASSERT
 
 #ifdef OGS_DISABLE_ASSERT
