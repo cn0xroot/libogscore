@@ -30,7 +30,7 @@ libogscore_1_0_la_SOURCES = \
 	ogs-sockaddr.c ogs-socket.c ogs-sockpair.c ogs-socknode.c \
 	ogs-udp.c ogs-tcp.c \
 	ogs-queue.c ogs-select.c ogs-poll.c ogs-notify.c \
-	ogs-tlv.c ogs-env.c ogs-fsm.c ogs-hash.c ogs-misc.c \
+	ogs-tlv.c ogs-env.c ogs-fsm.c ogs-hash.c ogs-misc.c ogs-getopt.c\
 	ogs-core.c abts.h abts.c \
 	$(NULL)
 
@@ -39,13 +39,13 @@ coreinclude_HEADERS = \
 	ogs-compat.h ogs-macros.h \
 	ogs-pool.h ogs-list.h \
 	ogs-abort.h ogs-errno.h \
-	ogs-strings.h ogs-time.h ogs-conv.h \
+	ogs-strings.h ogs-time.h ogs-conv.h
 	ogs-log.h ogs-pkbuf.h ogs-memory.h ogs-rbtree.h ogs-timer.h \
 	ogs-rand.h ogs-thread.h ogs-signal.h ogs-process.h \
 	ogs-sockaddr.h ogs-socket.h ogs-sockpair.h ogs-socknode.h \
 	ogs-udp.h ogs-tcp.h \
 	ogs-queue.h ogs-poll.h ogs-notify.h \
-	ogs-tlv.h ogs-env.h ogs-fsm.h ogs-hash.h ogs-misc.h \
+	ogs-tlv.h ogs-env.h ogs-fsm.h ogs-hash.h ogs-misc.h ogs-getopt.h \
 	abts.h \
 	$(NULL)
 

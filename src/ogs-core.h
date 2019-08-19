@@ -54,6 +54,7 @@
 #include "core/ogs-fsm.h"
 #include "core/ogs-hash.h"
 #include "core/ogs-misc.h"
+#include "core/ogs-getopt.h"
 
 #ifdef __cplusplus
 extern "C" {
