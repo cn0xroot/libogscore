@@ -161,12 +161,9 @@ char *ogs_getopt_arg(ogs_getopt_t *options)
 {
     char *option = options->argv[options->optind];
     options->subopt = 0;
-    if (option != 0 && option[0] != '-') {
+    if (option != 0)
         options->optind++;
-        return option;
-    } 
-
-    return 0;
+    return option;
 }
 
 static int ogs_getopt_longopts_end(const ogs_getopt_long_t *longopts, int i)
