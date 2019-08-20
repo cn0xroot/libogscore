@@ -481,6 +481,116 @@ void abts_init(int argc, const char *const argv[]) {
 }
        
 #if 1 /* modified by acetcom */
+static void show_help(const char *name)
+{
+    printf("Usage: %s [OPTIONS] [test1] [test2] [...]\n"
+       "\n"
+       "[OPTIONS]:\n"
+       "   -h                   Show help\n"
+       "   -f config_file       Set configuration filename\n"
+       "   -e warn|debug|trace  Set a global log-level (default:info)\n"
+       "   -m MASK              Set a log-domain (e.g. -m mme:sgw:gtp)\n"
+       "   -d                   Enable debigging\n"
+       "   -t                   Enable tracing for developer\n"
+       "   -v                   Enable verbose\n"
+       "   -q                   Enable quiet\n"
+       "   -x                   Exclude a test (e.g. -x sctp-test)\n"
+       "   -l                   List tests\n"
+       "\n", name);
+}
+
+int abts_main(int argc, char **argv, char **argv_out)
+{
+    char *arg;
+    int i, opt;
+    ogs_getopt_t options;
+    struct {
+        char *config_file;
+        char *log_level;
+        char *domain_mask;
+
+        bool enable_debug;
+        bool enable_trace;
+    } optarg;
+
+    memset(&optarg, 0, sizeof(optarg));
+
+    ogs_getopt_init(&options, argv);
+    while ((opt = ogs_getopt(&options, "hvxlqf:e:m:dt")) != -1) {
+        switch (opt) {
+        case 'h':
+            show_help(argv[0]);
+            break;
+        case 'v':
+            verbose = 1;
+            break;
+        case 'x':
+            exclude = 1;
+            break;
+        case 'l':
+            list_tests = 1;
+            break;
+        case 'q':
+            quiet = 1;
+            break;
+        case 'f':
+            optarg.config_file = options.optarg;
+            break;
+        case 'e':
+            optarg.log_level = options.optarg;
+            break;
+        case 'm':
+            optarg.domain_mask = options.optarg;
+            break;
+        case 'd':
+            optarg.enable_debug = true;
+            break;
+        case 't':
+            optarg.enable_trace = true;
+            break;
+        case '?':
+            show_help(argv[0]);
+            fprintf(stderr, "%s: %s\n", argv[0], options.errmsg);
+            return OGS_ERROR;
+        default:
+            fprintf(stderr, "%s: should not be reached\n", OGS_FUNC);
+            exit(1);
+        }
+    }
+
+    i = 0;
+    while((arg = ogs_getopt_arg(&options))) {
+        if (!testlist)
+            testlist = calloc(argc + 1, sizeof(char *));
+        testlist[i++] = arg;
+    }
+
+    if (optarg.enable_debug) optarg.log_level = "debug";
+    if (optarg.enable_trace) optarg.log_level = "trace";
+
+    i = 0;
+    argv_out[i++] = argv[0];
+
+    argv_out[i++] = "-e";
+    if (!optarg.log_level) 
+        argv_out[i++] = "error"; /* Default LOG Level : ERROR */
+    else 
+        argv_out[i++] = optarg.log_level;
+
+    if (optarg.config_file) {
+        argv_out[i++] = "-f";
+        argv_out[i++] = optarg.config_file;
+    }
+    if (optarg.domain_mask) {
+        argv_out[i++] = "-m";
+        argv_out[i++] = optarg.domain_mask;
+    }
+
+    argv_out[i] = NULL;
+    
+    return OGS_OK;
+}
+
 static void abts_free(abts_suite *suite)
 {
     sub_suite *ptr = NULL, *next_ptr = NULL;

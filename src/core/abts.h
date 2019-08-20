@@ -106,6 +106,7 @@ abts_suite *run_tests(abts_suite *suite);
 abts_suite *run_tests1(abts_suite *suite);
 #if 1 /* modified by acetcom */
 void abts_init(int argc, const char *const argv[]);
+int abts_main(int argc, char **argv, char **argv_out);
 int abts_report(abts_suite *suite);
 #endif
 
