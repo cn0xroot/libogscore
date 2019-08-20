@@ -483,9 +483,8 @@ void abts_init(int argc, const char *const argv[]) {
 #if 1 /* modified by acetcom */
 static void show_help(const char *name)
 {
-    printf("Usage: %s [OPTIONS] [test1] [test2] [...]\n"
-       "\n"
-       "[OPTIONS]:\n"
+    printf("Usage: %s [options] [test1] [test2] ...\n"
+       "Options:\n"
        "   -h                   Show help\n"
        "   -f config_file       Set configuration filename\n"
        "   -e warn|debug|trace  Set a global log-level (default:error)\n"
@@ -549,8 +548,8 @@ int abts_main(int argc, char **argv, char **argv_out)
             optarg.enable_trace = true;
             break;
         case '?':
-            show_help(argv[0]);
             fprintf(stderr, "%s: %s\n", argv[0], options.errmsg);
+            show_help(argv[0]);
             return OGS_ERROR;
         default:
             fprintf(stderr, "%s: should not be reached\n", OGS_FUNC);
