@@ -348,7 +348,7 @@ static ogs_log_level_e ogs_log_level_from_string(const char *string)
     return level;
 }
 
-int ogs_log_config_domain(char *domain, char *level)
+int ogs_log_config_domain(const char *domain, const char *level)
 {
     if (domain || level) {
         int l = ogs_core()->log.level;

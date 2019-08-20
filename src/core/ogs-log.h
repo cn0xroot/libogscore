@@ -87,7 +87,7 @@ int ogs_log_get_domain_id(const char *name);
 
 void ogs_log_install_domain(int *domain_id,
         const char *name, ogs_log_level_e level);
-int ogs_log_config_domain(char *domain, char *level);
+int ogs_log_config_domain(const char *domain, const char *level);
 
 void ogs_log_set_mask_level(const char *mask, ogs_log_level_e level);
 
