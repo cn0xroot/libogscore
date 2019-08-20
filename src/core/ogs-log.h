@@ -87,6 +87,8 @@ int ogs_log_get_domain_id(const char *name);
 
 void ogs_log_install_domain(int *domain_id,
         const char *name, ogs_log_level_e level);
+int ogs_log_config_domain(char *domain, char *level);
+
 void ogs_log_set_mask_level(const char *mask, ogs_log_level_e level);
 
 void ogs_log_vprintf(ogs_log_level_e level, int id,
@@ -99,8 +101,6 @@ void ogs_log_printf(ogs_log_level_e level, int domain_id,
 
 void ogs_log_hexdump_func(ogs_log_level_e level, int domain_id,
     const unsigned char *data, size_t len);
-
-ogs_log_level_e ogs_log_level_from_string(const char *string);
 
 #undef OGS_DISABLE_ASSERT
 

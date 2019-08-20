@@ -488,7 +488,7 @@ static void show_help(const char *name)
        "[OPTIONS]:\n"
        "   -h                   Show help\n"
        "   -f config_file       Set configuration filename\n"
-       "   -e warn|debug|trace  Set a global log-level (default:info)\n"
+       "   -e warn|debug|trace  Set a global log-level (default:error)\n"
        "   -m MASK              Set a log-domain (e.g. -m mme:sgw:gtp)\n"
        "   -d                   Enable debigging\n"
        "   -t                   Enable tracing for developer\n"

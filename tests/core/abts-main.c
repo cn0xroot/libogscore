@@ -71,35 +71,41 @@ static void terminate(void)
     ogs_core_finalize();
 }
 
-int main(int argc, const char **argv)
+int main(int argc, char **argv)
 {
-    int i;
-    int debug = 0, trace = 0;
-    const char *debug_mask = NULL, *trace_mask = NULL;
+    int rv, i, opt;
+    ogs_getopt_t options;
+    struct {
+        char *config_file;
+        char *log_level;
+        char *domain_mask;
+    } optarg;
+    char *argv_out[argc+2]; /* '-e error' is always added */
+    
     abts_suite *suite = NULL;
     ogs_pkbuf_config_t config;
 
-    abts_init(argc, argv);
+    rv = abts_main(argc, argv, argv_out);
+    if (rv != OGS_OK) return rv;
 
-    for (i = 1; i < argc; i++) {
-        /* abts_init(argc, argv) handles the following options */
-        if (!strcmp(argv[i], "-v")) continue;
-        if (!strcmp(argv[i], "-x")) continue;
-        if (!strcmp(argv[i], "-l")) continue;
-        if (!strcmp(argv[i], "-q")) continue;
+    memset(&optarg, 0, sizeof(optarg));
+    ogs_getopt_init(&options, argv_out);
 
-        if (!strcmp(argv[i], "-d")) {
-            debug = 1; debug_mask = argv[++i];
-            continue;
-        }
-        if (!strcmp(argv[i], "-t")) {
-            trace = 1; trace_mask = argv[++i];
-            continue;
-        }
-
-        if (argv[i][0] == '-') {
-            fprintf(stderr, "Invalid option: `%s'\n", argv[i]);
-            exit(1);
+    while ((opt = ogs_getopt(&options, "f:e:m:")) != -1) {
+        switch (opt) {
+        case 'f':
+            optarg.config_file = options.optarg;
+            break;
+        case 'e':
+            optarg.log_level = options.optarg;
+            break;
+        case 'm':
+            optarg.domain_mask = options.optarg;
+            break;
+        case '?':
+        default:
+            fprintf(stderr, "%s: should not be reached\n", OGS_FUNC);
+            return OGS_ERROR;
         }
     }
 
@@ -108,17 +114,11 @@ int main(int argc, const char **argv)
     ogs_pkbuf_default_create(&config);
     atexit(terminate);
 
-    if (debug)
-        ogs_log_set_mask_level(
-                strlen(debug_mask) ? debug_mask : NULL, OGS_LOG_DEBUG);
-    if (trace)
-        ogs_log_set_mask_level(
-                strlen(trace_mask) ? trace_mask : NULL, OGS_LOG_TRACE);
+    rv = ogs_log_config_domain(optarg.domain_mask, optarg.log_level);
+    if (rv != OGS_OK) return rv;
 
     for (i = 0; alltests[i].func; i++)
-    {
         suite = alltests[i].func(suite);
-    }
 
     return abts_report(suite);
 }

@@ -333,6 +333,42 @@ void ogs_log_set_mask_level(const char *_mask, ogs_log_level_e level)
     }
 }
 
+static ogs_log_level_e ogs_log_level_from_string(const char *string)
+{
+    ogs_log_level_e level = OGS_ERROR;
+
+    if (!strcasecmp(string, "none")) level = OGS_LOG_NONE;
+    else if (!strcasecmp(string, "fatal")) level = OGS_LOG_FATAL;
+    else if (!strcasecmp(string, "error")) level = OGS_LOG_ERROR;
+    else if (!strcasecmp(string, "warn")) level = OGS_LOG_WARN;
+    else if (!strcasecmp(string, "info")) level = OGS_LOG_INFO;
+    else if (!strcasecmp(string, "debug")) level = OGS_LOG_DEBUG;
+    else if (!strcasecmp(string, "trace")) level = OGS_LOG_TRACE;
+
+    return level;
+}
+
+int ogs_log_config_domain(char *domain, char *level)
+{
+    if (domain || level) {
+        int l = ogs_core()->log.level;
+
+        if (level) {
+            l = ogs_log_level_from_string(level);
+            if (l == OGS_ERROR) {
+                ogs_error("Invalid LOG-LEVEL "
+                        "[none:fatal|error|warn|info|debug|trace]: %s\n",
+                        level);
+                return OGS_ERROR;
+            }
+        }
+
+        ogs_log_set_mask_level(domain, l);
+    }
+
+    return OGS_OK;
+}
+
 void ogs_log_vprintf(ogs_log_level_e level, int id,
     ogs_err_t err, const char *file, int line, const char *func,
     int content_only, const char *format, va_list ap)
@@ -572,20 +608,5 @@ static void file_writer(
 {
     fprintf(log->file.out, "%s", string);
     fflush(log->file.out);
-}
-
-ogs_log_level_e ogs_log_level_from_string(const char *string)
-{
-    ogs_log_level_e level = OGS_ERROR;
-
-    if (!strcasecmp(string, "none")) level = OGS_LOG_NONE;
-    else if (!strcasecmp(string, "fatal")) level = OGS_LOG_FATAL;
-    else if (!strcasecmp(string, "error")) level = OGS_LOG_ERROR;
-    else if (!strcasecmp(string, "warn")) level = OGS_LOG_WARN;
-    else if (!strcasecmp(string, "info")) level = OGS_LOG_INFO;
-    else if (!strcasecmp(string, "debug")) level = OGS_LOG_DEBUG;
-    else if (!strcasecmp(string, "trace")) level = OGS_LOG_TRACE;
-
-    return level;
 }
 
