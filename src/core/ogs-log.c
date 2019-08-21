@@ -562,8 +562,8 @@ static char *log_level(char *buf, char *last,
 {
     char *colors[] = {
         TA_NOR,
-        TA_FGC_BOLD_RED, TA_FGC_BOLD_YELLOW, TA_FGC_BOLD_CYAN, TA_FGC_BOLD_GREEN,
-        TA_FGC_BOLD_WHITE, TA_FGC_WHITE,
+        TA_FGC_BOLD_RED, TA_FGC_BOLD_YELLOW, TA_FGC_BOLD_CYAN,
+        TA_FGC_BOLD_GREEN, TA_FGC_BOLD_WHITE, TA_FGC_WHITE,
     };
 
     buf = ogs_slprintf(buf, last, "%s%s%s: ",
