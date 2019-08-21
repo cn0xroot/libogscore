@@ -76,7 +76,6 @@ int main(int argc, char **argv)
     int rv, i, opt;
     ogs_getopt_t options;
     struct {
-        char *config_file;
         char *log_level;
         char *domain_mask;
     } optarg;
@@ -91,11 +90,8 @@ int main(int argc, char **argv)
     memset(&optarg, 0, sizeof(optarg));
     ogs_getopt_init(&options, argv_out);
 
-    while ((opt = ogs_getopt(&options, "f:e:m:")) != -1) {
+    while ((opt = ogs_getopt(&options, "e:m:")) != -1) {
         switch (opt) {
-        case 'f':
-            optarg.config_file = options.optarg;
-            break;
         case 'e':
             optarg.log_level = options.optarg;
             break;

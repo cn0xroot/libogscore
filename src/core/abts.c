@@ -486,7 +486,7 @@ static void show_help(const char *name)
     printf("Usage: %s [options] [test1] [test2] ...\n"
        "Options:\n"
        "   -h                   Show help\n"
-       "   -f config_file       Set configuration filename\n"
+       "   -c config_file       Set configuration filename\n"
        "   -e warn|debug|trace  Set a global log-level (default:error)\n"
        "   -m MASK              Set a log-domain (e.g. -m mme:sgw:gtp)\n"
        "   -d                   Enable debigging\n"
@@ -515,7 +515,7 @@ int abts_main(int argc, char **argv, char **argv_out)
     memset(&optarg, 0, sizeof(optarg));
 
     ogs_getopt_init(&options, argv);
-    while ((opt = ogs_getopt(&options, "hvxlqf:e:m:dt")) != -1) {
+    while ((opt = ogs_getopt(&options, "hvxlqc:e:m:dt")) != -1) {
         switch (opt) {
         case 'h':
             show_help(argv[0]);
@@ -532,7 +532,7 @@ int abts_main(int argc, char **argv, char **argv_out)
         case 'q':
             quiet = 1;
             break;
-        case 'f':
+        case 'c':
             optarg.config_file = options.optarg;
             break;
         case 'e':
@@ -577,7 +577,7 @@ int abts_main(int argc, char **argv, char **argv_out)
         argv_out[i++] = optarg.log_level;
 
     if (optarg.config_file) {
-        argv_out[i++] = "-f";
+        argv_out[i++] = "-c";
         argv_out[i++] = optarg.config_file;
     }
     if (optarg.domain_mask) {
