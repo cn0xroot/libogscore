@@ -484,17 +484,18 @@ void abts_init(int argc, const char *const argv[]) {
 static void show_help(const char *name)
 {
     printf("Usage: %s [options] [test1] [test2] ...\n"
-       "Options:\n"
-       "   -h                   Show help\n"
-       "   -c config_file       Set configuration filename\n"
-       "   -e warn|debug|trace  Set a global log-level (default:error)\n"
-       "   -m MASK              Set a log-domain (e.g. -m mme:sgw:gtp)\n"
-       "   -d                   Enable debigging\n"
-       "   -t                   Enable tracing for developer\n"
-       "   -v                   Enable verbose\n"
-       "   -q                   Enable quiet\n"
-       "   -x                   Exclude a test (e.g. -x sctp-test)\n"
-       "   -l                   List tests\n"
+        "Options:\n"
+       "   -c filename    : set configuration file\n"
+       "   -e level       : set global log-level (default:info)\n"
+       "   -m domain      : set log-domain (e.g. mme:sgw:gtp)\n"
+       "   -d             : print lots of debugging information\n"
+       "   -t             : print tracing information for developer\n"
+       "   -v             : show version number and exit\n"
+       "   -h             : show this message and exit\n"
+       "   -v             : turn on verbose in test\n"
+       "   -q             : turn off status in test\n"
+       "   -x             : exclute test-unit (e.g. -x sctp-test)\n"
+       "   -l             : list test-unit\n"
        "\n", name);
 }
 
