@@ -39,7 +39,7 @@ coreinclude_HEADERS = \
 	ogs-compat.h ogs-macros.h \
 	ogs-pool.h ogs-list.h \
 	ogs-abort.h ogs-errno.h \
-	ogs-strings.h ogs-time.h ogs-conv.h
+	ogs-strings.h ogs-time.h ogs-conv.h \
 	ogs-log.h ogs-pkbuf.h ogs-memory.h ogs-rbtree.h ogs-timer.h \
 	ogs-rand.h ogs-thread.h ogs-signal.h ogs-process.h \
 	ogs-sockaddr.h ogs-socket.h ogs-sockpair.h ogs-socknode.h \
