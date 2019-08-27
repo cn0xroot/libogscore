@@ -117,12 +117,20 @@ void ogs_log_hexdump_func(ogs_log_level_e level, int domain_id,
         ogs_abort(); \
     } while(0)
 
-#define ogs_expect(expr, fallback) \
+#define ogs_expect(expr) \
     do { \
         if (ogs_likely(expr)) ; \
         else { \
             ogs_error("%s: Expectation `%s' failed.", OGS_FUNC, #expr); \
-            fallback; \
+        } \
+    } while (0)
+
+#define ogs_expect_or_return(expr) \
+    do { \
+        if (ogs_likely(expr)) ; \
+        else { \
+            ogs_error("%s: Expectation `%s' failed.", OGS_FUNC, #expr); \
+            return; \
         } \
     } while (0)
 
