@@ -24,6 +24,8 @@
 #error "Only <ogs-core.h> can be included directly."
 #endif
 
+#include <stdlib.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

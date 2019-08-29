@@ -24,6 +24,10 @@
 #error "Only <ogs-core.h> can be included directly."
 #endif
 
+#if !defined(_WIN32)
+#include <errno.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

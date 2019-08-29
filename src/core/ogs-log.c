@@ -17,6 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#if HAVE_CTYPE_H
+#include <ctype.h>
+#endif
+
+#if HAVE_STDARG_H
+#include <stdarg.h>
+#endif
+
 #include "ogs-core.h"
 
 #define TA_NOR              "\033[0m"       /* all off */

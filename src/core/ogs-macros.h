@@ -77,24 +77,6 @@ extern "C" {
 #define OGS_PASTE(n1, n2)           OGS_PASTE_HELPER(n1, n2)
 #define OGS_PASTE_HELPER(n1, n2)    n1##n2
 
-#if WORDS_BIGENDIAN
-#define ED2(x1, x2) x1 x2
-#define ED3(x1, x2, x3) x1 x2 x3
-#define ED4(x1, x2, x3, x4) x1 x2 x3 x4
-#define ED5(x1, x2, x3, x4, x5) x1 x2 x3 x4 x5
-#define ED6(x1, x2, x3, x4, x5, x6) x1 x2 x3 x4 x5 x6
-#define ED7(x1, x2, x3, x4, x5, x6, x7) x1 x2 x3 x4 x5 x6 x7
-#define ED8(x1, x2, x3, x4, x5, x6, x7, x8) x1 x2 x3 x4 x5 x6 x7 x8
-#else
-#define ED2(x1, x2) x2 x1
-#define ED3(x1, x2, x3) x3 x2 x1
-#define ED4(x1, x2, x3, x4) x4 x3 x2 x1
-#define ED5(x1, x2, x3, x4, x5) x5 x4 x3 x2 x1
-#define ED6(x1, x2, x3, x4, x5, x6) x6 x5 x4 x3 x2 x1
-#define ED7(x1, x2, x3, x4, x5, x6, x7) x7 x6 x5 x4 x3 x2 x1
-#define ED8(x1, x2, x3, x4, x5, x6, x7, x8) x8 x7 x6 x5 x4 x3 x2 x1
-#endif
-
 #define INET_NTOP(src, dst) \
     inet_ntop(AF_INET, (void *)(uintptr_t)(src), (dst), INET_ADDRSTRLEN)
 #define INET6_NTOP(src, dst) \
@@ -141,6 +123,23 @@ extern "C" {
 #include <endian.h>
 #endif
 
+#if WORDS_BIGENDIAN
+#define ED2(x1, x2) x1 x2
+#define ED3(x1, x2, x3) x1 x2 x3
+#define ED4(x1, x2, x3, x4) x1 x2 x3 x4
+#define ED5(x1, x2, x3, x4, x5) x1 x2 x3 x4 x5
+#define ED6(x1, x2, x3, x4, x5, x6) x1 x2 x3 x4 x5 x6
+#define ED7(x1, x2, x3, x4, x5, x6, x7) x1 x2 x3 x4 x5 x6 x7
+#define ED8(x1, x2, x3, x4, x5, x6, x7, x8) x1 x2 x3 x4 x5 x6 x7 x8
+#else
+#define ED2(x1, x2) x2 x1
+#define ED3(x1, x2, x3) x3 x2 x1
+#define ED4(x1, x2, x3, x4) x4 x3 x2 x1
+#define ED5(x1, x2, x3, x4, x5) x5 x4 x3 x2 x1
+#define ED6(x1, x2, x3, x4, x5, x6) x6 x5 x4 x3 x2 x1
+#define ED7(x1, x2, x3, x4, x5, x6, x7) x7 x6 x5 x4 x3 x2 x1
+#define ED8(x1, x2, x3, x4, x5, x6, x7, x8) x8 x7 x6 x5 x4 x3 x2 x1
+#endif
 
 #ifdef __cplusplus
 }

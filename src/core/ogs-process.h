@@ -69,6 +69,8 @@ typedef struct ogs_proc_s {
 } ogs_proc_t;
 
 #if !defined(_WIN32)
+#include <semaphore.h>
+
 typedef sem_t ogs_proc_mutex_t;
 #define ogs_proc_mutex_wait sem_wait
 #define ogs_proc_mutex_post sem_post

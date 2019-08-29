@@ -60,7 +60,7 @@ static ogs_inline int ogs_thread_cond_timedwait(
     r = pthread_cond_timedwait(cond, mutex, &to);
     if (r == 0)
         return OGS_OK; 
-    else if (r == ETIMEDOUT)
+    else if (r == OGS_ETIMEDOUT)
         return OGS_TIMEUP;
     else 
         return OGS_ERROR;

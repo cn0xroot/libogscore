@@ -17,6 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#if HAVE_FCNTL_H
+#include <fcntl.h>
+#endif
+
+#if HAVE_STDARG_H
+#include <stdarg.h>
+#endif
+
 #include "ogs-core.h"
 
 int ogs_vsnprintf(char *str, size_t size, const char *format, va_list ap)

@@ -19,7 +19,6 @@ SUBDIRS = core crypt
 
 ogsincludedir=$(includedir)/ogslib-@OGS_API_VERSION@
 ogsinclude_HEADERS = \
-	ogs-config.h \
 	ogs-core.h \
 	ogs-crypt.h \
 	$(NULL)
