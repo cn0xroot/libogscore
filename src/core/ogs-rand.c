@@ -21,6 +21,10 @@
 #include "config.h"
 #endif
 
+#if HAVE_SYS_PARAM_H
+#include <sys/param.h>
+#endif
+
 #if HAVE_SYS_RANDOM_H
 #include <sys/random.h>
 #endif

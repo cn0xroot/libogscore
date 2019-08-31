@@ -25,10 +25,10 @@
 #include <unistd.h>
 #endif
 
+#include <sys/epoll.h>
+
 #include "ogs-core.h"
 #include "ogs-poll-private.h"
-
-#include <sys/epoll.h>
 
 static void epoll_init(ogs_pollset_t *pollset);
 static void epoll_cleanup(ogs_pollset_t *pollset);
