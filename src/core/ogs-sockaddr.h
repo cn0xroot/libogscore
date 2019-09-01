@@ -17,13 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "ogs-prelude.h"
+
 #ifndef OGS_SOCKADDR_H
 #define OGS_SOCKADDR_H
 
-#if !defined(OGS_CORE_INSIDE)
-#error "Only <ogs-core.h> can be included directly."
-#endif
-
+/* FIXME */
 #include <netinet/in.h>
 
 #ifdef __cplusplus

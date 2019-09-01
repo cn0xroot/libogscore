@@ -21,7 +21,7 @@
 #define OGS_POLL_PRIVATE_H
 
 #if !defined(OGS_CORE_COMPILATION)
-#error "Only <ogs-core.h> can be included directly."
+#error "This private header cannot be included directly."
 #endif
 
 #ifdef __cplusplus

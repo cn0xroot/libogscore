@@ -34,7 +34,7 @@ AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE([1.13 foreign subdir-objects])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-AC_CONFIG_HEADER([src/config.h])
+AC_CONFIG_HEADER([config.h])
 
 dnl Detect Host OS
 case "$host" in

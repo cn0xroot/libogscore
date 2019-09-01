@@ -74,6 +74,10 @@ AM_CFLAGS = \
 	-Wall -Werror \
 	$(NULL)
 
+AM_CPPFLAGS = \
+    -I$(top_srcdir)/src \
+	$(NULL)
+
 EXTRA_DIST = \
 	$(NOINST_H_FILES) \
 	$(NULL)

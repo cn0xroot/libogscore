@@ -17,42 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-prelude.h"
-
-#ifndef OGS_COMPAT_H
-#define OGS_COMPAT_H
-
-#if defined(_WIN32)
-
-#include <winsock2.h>
-#include <ws2tcpip.h> /* IPv6 */
-
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#undef WIN32_LEAN_AND_MEAN
-#else
-#include <windows.h>
-#endif
-
-/* For structs needed by GetAdaptersAddresses */
-#if defined(_WIN32_WINNT) && (_WIN32_WINNT < 0x0600)
-#undef _WIN32_WINNT
-#endif
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0600
-#endif
-
-#else /* !defined(_WIN32) */
-
-#include <stdio.h>
-#include <stddef.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
-#endif
-
+#if !defined(OGS_CORE_INSIDE) && !defined(OGS_CORE_COMPILATION)
+#error "This header cannot be included directly."
 #endif

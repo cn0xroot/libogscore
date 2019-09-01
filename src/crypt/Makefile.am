@@ -49,6 +49,10 @@ AM_LDFLAGS = \
 	$(NULL)
 
 AM_CFLAGS = \
-	-DOGS_CRYPT_COMPILATION \
+	-DOGS_CORE_COMPILATION \
 	-Wall -Werror \
+	$(NULL)
+
+AM_CPPFLAGS = \
+    -I$(top_srcdir)/src \
 	$(NULL)

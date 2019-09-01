@@ -17,12 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "ogs-prelude.h"
+
 #ifndef OGS_SOCKPAIR_H
 #define OGS_SOCKPAIR_H
-
-#if !defined(OGS_CORE_INSIDE)
-#error "Only <ogs-core.h> can be included directly."
-#endif
 
 #ifdef __cplusplus
 extern "C" {

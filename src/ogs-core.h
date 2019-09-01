@@ -56,6 +56,8 @@
 #include "core/ogs-misc.h"
 #include "core/ogs-getopt.h"
 
+#undef OGS_CORE_INSIDE
+
 #ifdef __cplusplus
 extern "C" {
 #endif

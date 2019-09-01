@@ -17,12 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "ogs-prelude.h"
+
 #ifndef OGS_SHA1_H
 #define OGS_SHA1_H
-
-#if !defined(OGS_CRYPT_INSIDE)
-#error "Only <ogs-crypt.h> can be included directly."
-#endif
 
 #ifdef __cplusplus
 extern "C" {

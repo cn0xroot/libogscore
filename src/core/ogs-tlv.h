@@ -17,12 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "ogs-prelude.h"
+
 #ifndef OGS_TLV_H
 #define OGS_TLV_H
-
-#if !defined(OGS_CORE_INSIDE)
-#error "Only <ogs-core.h> can be included directly."
-#endif
 
 #define OGS_TLV_MODE_T1_L1              1
 #define OGS_TLV_MODE_T1_L2              2

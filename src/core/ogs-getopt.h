@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "ogs-prelude.h"
+
 #ifndef OGS_GETOPT_H
 #define OGS_GETOPT_H
 
@@ -27,7 +29,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif
 
 typedef struct ogs_getopt_s {
     char **argv;

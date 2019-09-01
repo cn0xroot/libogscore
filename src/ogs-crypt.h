@@ -21,7 +21,6 @@
 #define OGS_CRYPT_H
 
 #define OGS_CORE_INSIDE
-#define OGS_CRYPT_INSIDE
 
 #include "core/ogs-compat.h"
 #include "core/ogs-macros.h"
@@ -35,6 +34,8 @@
 #include "crypt/ogs-sha2-hmac.h"
 #include "crypt/ogs-aes.h"
 #include "crypt/ogs-aes-cmac.h"
+
+#undef OGS_CORE_INSIDE
 
 #ifdef __cplusplus
 extern "C" {
