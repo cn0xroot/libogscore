@@ -22,9 +22,6 @@
 #ifndef OGS_SOCKADDR_H
 #define OGS_SOCKADDR_H
 
-/* FIXME */
-#include <netinet/in.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif

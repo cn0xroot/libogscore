@@ -87,6 +87,14 @@ extern "C" {
 
 #include <libkern/OSByteOrder.h>
 
+#if defined(__DARWIN_LITTLE_ENDIAN)
+#define WORDS_BIGENDIAN 0
+#elif defined(__DARWIN_BIG_ENDIAN)
+#define WORDS_BIGENDIAN 1
+#else
+#error "Unknown endian in APPLE"
+#endif
+
 #define htole16(x) OSSwapHostToLittleInt16((x))
 #define htole32(x) OSSwapHostToLittleInt32((x))
 #define htole64(x) OSSwapHostToLittleInt64((x))
