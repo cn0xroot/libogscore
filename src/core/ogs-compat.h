@@ -52,7 +52,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <netinet/in.h>
+#include <errno.h>
+#include <arpa/inet.h>
+#include <pthread.h>
 
 #endif
 

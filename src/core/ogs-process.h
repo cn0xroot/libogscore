@@ -66,17 +66,6 @@ typedef struct ogs_proc_s {
 #endif
 } ogs_proc_t;
 
-#if !defined(_WIN32)
-#include <semaphore.h>
-
-typedef sem_t ogs_proc_mutex_t;
-#define ogs_proc_mutex_wait sem_wait
-#define ogs_proc_mutex_post sem_post
-#define ogs_proc_mutex_delete sem_close
-#else
-typedef HANDLE ogs_proc_mutex_t;
-#endif
-
 enum ogs_proc_option_e {
     // stdout and stderr are the same FILE.
     ogs_proc_option_combined_stdout_stderr = 0x1,
@@ -97,9 +86,6 @@ int ogs_proc_destroy(ogs_proc_t *const process);
 
 int ogs_proc_terminate(ogs_proc_t *const process);
 int ogs_proc_kill(ogs_proc_t *const process);
-
-ogs_proc_mutex_t *ogs_proc_mutex_create(int value);
-int ogs_proc_mutex_timedwait(ogs_proc_mutex_t *mutex, ogs_time_t timeout);
 
 #ifdef __cplusplus
 }

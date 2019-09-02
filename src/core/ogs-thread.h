@@ -31,7 +31,6 @@ extern "C" {
  * https://github.com/mongodb/mongo-c-driver/blob/master/src/libmongoc/src/mongoc/mongoc-thread-private.h
  */
 #if !defined(_WIN32)
-#include <pthread.h>
 #define ogs_thread_mutex_t pthread_mutex_t
 #define ogs_thread_mutex_init(_n) (void)pthread_mutex_init((_n), NULL)
 #define ogs_thread_mutex_lock (void)pthread_mutex_lock

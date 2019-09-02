@@ -22,10 +22,6 @@
 #ifndef OGS_ERRNO_H
 #define OGS_ERRNO_H
 
-#if !defined(_WIN32)
-#include <errno.h>
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif

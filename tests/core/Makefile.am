@@ -25,10 +25,6 @@ testcore_SOURCES = \
 	abts-main.c \
 	$(NULL)
 
-if !OGS_WINDOWS
-testcore_SOURCES += process-test.c
-endif
-
 LDADD = \
     $(top_srcdir)/src/core/libogscore-@OGS_API_VERSION@.la \
 	$(NULL)

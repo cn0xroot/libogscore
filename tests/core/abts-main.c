@@ -31,7 +31,6 @@ abts_suite *test_memory(abts_suite *suite);
 abts_suite *test_rbtree(abts_suite *suite);
 abts_suite *test_timer(abts_suite *suite);
 abts_suite *test_thread(abts_suite *suite);
-abts_suite *test_process(abts_suite *suite);
 abts_suite *test_socket(abts_suite *suite);
 abts_suite *test_queue(abts_suite *suite);
 abts_suite *test_poll(abts_suite *suite);
@@ -53,9 +52,6 @@ const struct testlist {
     {test_rbtree},
     {test_timer},
     {test_thread},
-#if !defined(_WIN32)
-    {test_process},
-#endif
     {test_socket},
     {test_queue},
     {test_poll},
