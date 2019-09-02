@@ -79,12 +79,12 @@ AC_CHECK_HEADERS( \
     ifaddrs.h \
     netdb.h \
     pthread.h \
-    semaphore.h \
     signal.h \
     stdarg.h \
     stddef.h \
     stdio.h \
     stdint.h \
+    stdbool.h \
     stdlib.h \
     string.h \
     strings.h \
@@ -106,7 +106,6 @@ AC_CHECK_HEADERS( \
     sys/types.h \
     sys/wait.h \
     sys/uio.h \
-    stdbool.h \
 )
 
 ##########################################
@@ -131,7 +130,6 @@ AC_CHECK_FUNCS(\
     getifaddrs \
     getenv putenv setenv unsetenv \
     eventfd \
-    sem_timedwait \
 )
 
 AC_DECL_SYS_SIGLIST
