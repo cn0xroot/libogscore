@@ -64,6 +64,91 @@ extern "C" {
 #define OGS_GNUC_PRINTF(f, v) 
 #endif
 
+#if defined(_WIN32)
+
+#   if BYTE_ORDER == LITTLE_ENDIAN
+#       define OGS_WORDS_BIGENDIAN 0
+#   elif BYTE_ORDER == BIG_ENDIAN
+#       define OGS_WORDS_BIGENDIAN 1
+#   else
+#       error byte order not supported
+#   endif
+
+#   define htole16(x) (x)
+#   define htole32(x) (x)
+#   define htole64(x) (x)
+#   define le16toh(x) (x)
+#   define le32toh(x) (x)
+#   define le64toh(x) (x)
+
+#   define htobe16(x) htons((x))
+#   define htobe32(x) htonl((x))
+#   define htobe64(x) htonll((x))
+#   define be16toh(x) ntohs((x))
+#   define be32toh(x) ntohl((x))
+#   define be64toh(x) ntohll((x))
+
+#   define __BYTE_ORDER    BYTE_ORDER
+#   define __BIG_ENDIAN    BIG_ENDIAN
+#   define __LITTLE_ENDIAN LITTLE_ENDIAN
+
+#elif defined(__linux__) || defined(__CYGWIN__)
+#   include <endian.h>
+
+#elif defined(__APPLE__)
+#   include <libkern/OSByteOrder.h>
+
+#   define htole16(x) OSSwapHostToLittleInt16((x))
+#   define htole32(x) OSSwapHostToLittleInt32((x))
+#   define htole64(x) OSSwapHostToLittleInt64((x))
+#   define le16toh(x) OSSwapLittleToHostInt16((x))
+#   define le32toh(x) OSSwapLittleToHostInt32((x))
+#   define le64toh(x) OSSwapLittleToHostInt64((x))
+
+#   define htobe16(x) OSSwapHostToBigInt16((x))
+#   define htobe32(x) OSSwapHostToBigInt32((x))
+#   define htobe64(x) OSSwapHostToBigInt64((x))
+#   define be16toh(x) OSSwapBigToHostInt16((x))
+#   define be32toh(x) OSSwapBigToHostInt32((x))
+#   define be64toh(x) OSSwapBigToHostInt64((x))
+
+#   define __BYTE_ORDER    BYTE_ORDER
+#   define __BIG_ENDIAN    BIG_ENDIAN
+#   define __LITTLE_ENDIAN LITTLE_ENDIAN
+
+#elif defined(__FreeBSD__)
+#   include <sys/endian.h>
+
+#   define le16toh(x) letoh16(x)
+#   define le32toh(x) letoh32(x)
+#   define le64toh(x) letoh64(x)
+
+#   define be16toh(x) betoh16(x)
+#   define be32toh(x) betoh32(x)
+#   define be64toh(x) betoh64(x)
+
+#else
+#   error platform not supported
+#endif
+
+#if __BYTE_ORDER == __BIG_ENDIAN
+#define ED2(x1, x2) x1 x2
+#define ED3(x1, x2, x3) x1 x2 x3
+#define ED4(x1, x2, x3, x4) x1 x2 x3 x4
+#define ED5(x1, x2, x3, x4, x5) x1 x2 x3 x4 x5
+#define ED6(x1, x2, x3, x4, x5, x6) x1 x2 x3 x4 x5 x6
+#define ED7(x1, x2, x3, x4, x5, x6, x7) x1 x2 x3 x4 x5 x6 x7
+#define ED8(x1, x2, x3, x4, x5, x6, x7, x8) x1 x2 x3 x4 x5 x6 x7 x8
+#else
+#define ED2(x1, x2) x2 x1
+#define ED3(x1, x2, x3) x3 x2 x1
+#define ED4(x1, x2, x3, x4) x4 x3 x2 x1
+#define ED5(x1, x2, x3, x4, x5) x5 x4 x3 x2 x1
+#define ED6(x1, x2, x3, x4, x5, x6) x6 x5 x4 x3 x2 x1
+#define ED7(x1, x2, x3, x4, x5, x6, x7) x7 x6 x5 x4 x3 x2 x1
+#define ED8(x1, x2, x3, x4, x5, x6, x7, x8) x8 x7 x6 x5 x4 x3 x2 x1
+#endif
+
 #define OGS_STATIC_ASSERT(expr) \
     typedef char dummy_for_ogs_static_assert##__LINE__[(expr) ? 1 : -1]
 
@@ -82,70 +167,6 @@ extern "C" {
 
 #define ogs_max(x , y)  (((x) > (y)) ? (x) : (y))
 #define ogs_min(x , y)  (((x) < (y)) ? (x) : (y))
-
-#ifdef __APPLE__
-
-#include <libkern/OSByteOrder.h>
-
-#if defined(__DARWIN_LITTLE_ENDIAN)
-#define WORDS_BIGENDIAN 0
-#elif defined(__DARWIN_BIG_ENDIAN)
-#define WORDS_BIGENDIAN 1
-#else
-#error "Unknown endian in APPLE"
-#endif
-
-#define htole16(x) OSSwapHostToLittleInt16((x))
-#define htole32(x) OSSwapHostToLittleInt32((x))
-#define htole64(x) OSSwapHostToLittleInt64((x))
-#define le16toh(x) OSSwapLittleToHostInt16((x))
-#define le32toh(x) OSSwapLittleToHostInt32((x))
-#define le64toh(x) OSSwapLittleToHostInt64((x))
-
-#define htobe16(x) OSSwapHostToBigInt16((x))
-#define htobe32(x) OSSwapHostToBigInt32((x))
-#define htobe64(x) OSSwapHostToBigInt64((x))
-#define be16toh(x) OSSwapBigToHostInt16((x))
-#define be32toh(x) OSSwapBigToHostInt32((x))
-#define be64toh(x) OSSwapBigToHostInt64((x))
-
-#elif WIN32
-
-#define htole16(x) (x)
-#define htole32(x) (x)
-#define htole64(x) (x)
-#define le16toh(x) (x)
-#define le32toh(x) (x)
-#define le64toh(x) (x)
-
-#define htobe16(x) htons((x))
-#define htobe32(x) htonl((x))
-#define htobe64(x) htonll((x))
-#define be16toh(x) ntohs((x))
-#define be32toh(x) ntohl((x))
-#define be64toh(x) ntohll((x))
-
-#else
-#include <endian.h>
-#endif
-
-#if WORDS_BIGENDIAN
-#define ED2(x1, x2) x1 x2
-#define ED3(x1, x2, x3) x1 x2 x3
-#define ED4(x1, x2, x3, x4) x1 x2 x3 x4
-#define ED5(x1, x2, x3, x4, x5) x1 x2 x3 x4 x5
-#define ED6(x1, x2, x3, x4, x5, x6) x1 x2 x3 x4 x5 x6
-#define ED7(x1, x2, x3, x4, x5, x6, x7) x1 x2 x3 x4 x5 x6 x7
-#define ED8(x1, x2, x3, x4, x5, x6, x7, x8) x1 x2 x3 x4 x5 x6 x7 x8
-#else
-#define ED2(x1, x2) x2 x1
-#define ED3(x1, x2, x3) x3 x2 x1
-#define ED4(x1, x2, x3, x4) x4 x3 x2 x1
-#define ED5(x1, x2, x3, x4, x5) x5 x4 x3 x2 x1
-#define ED6(x1, x2, x3, x4, x5, x6) x6 x5 x4 x3 x2 x1
-#define ED7(x1, x2, x3, x4, x5, x6, x7) x7 x6 x5 x4 x3 x2 x1
-#define ED8(x1, x2, x3, x4, x5, x6, x7, x8) x8 x7 x6 x5 x4 x3 x2 x1
-#endif
 
 #ifdef __cplusplus
 }

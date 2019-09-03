@@ -113,9 +113,6 @@ AC_CHECK_HEADERS( \
 ####  and compiler characteristics.   ####
 ##########################################
 
-dnl Checks for endianess.
-AC_C_BIGENDIAN
-
 dnl Checks for libraries.
 AC_SEARCH_LIBS(gethostbyname, nsl)
 AC_SEARCH_LIBS(gethostname, nsl)

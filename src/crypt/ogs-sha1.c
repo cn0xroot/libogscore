@@ -142,7 +142,7 @@ void ogs_sha1_final(ogs_sha1_ctx *ctx, uint8_t *digest)
     return 1;
 #else
     {
-#if WORDS_BIGENDIAN
+#if __BYTE_ORDER == __BIG_ENDIAN
         memcpy(digest, ctx->Message_Digest, OGS_SHA1_DIGEST_SIZE);
 #else
 #define ROTR(a) ((((unsigned)(a))>>8)|((a)<<24))
