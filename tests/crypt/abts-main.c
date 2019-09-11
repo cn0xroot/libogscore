@@ -35,7 +35,7 @@ const struct testlist {
 static void terminate(void)
 {
     ogs_pkbuf_default_destroy();
-    ogs_core_finalize();
+    ogs_core_terminate();
 }
 
 int main(int argc, char **argv)

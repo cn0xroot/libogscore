@@ -45,7 +45,6 @@ void ogs_core_initialize(void)
     ogs_pkbuf_init();
     ogs_socket_init();
     ogs_tlv_init();
-    ogs_signal_init();
 
     ogs_log_install_domain(&__ogs_mem_domain, "mem", ogs_core()->log.level);
     ogs_log_install_domain(&__ogs_sock_domain, "sock", ogs_core()->log.level);
@@ -55,7 +54,7 @@ void ogs_core_initialize(void)
     ogs_log_install_domain(&__ogs_tlv_domain, "tlv", ogs_core()->log.level);
 }
 
-void ogs_core_finalize(void)
+void ogs_core_terminate(void)
 {
     ogs_tlv_final();
     ogs_socket_final();

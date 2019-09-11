@@ -95,7 +95,7 @@ typedef struct {
 } ogs_core_context_t;
 
 void ogs_core_initialize(void);
-void ogs_core_finalize(void);
+void ogs_core_terminate(void);
 
 ogs_core_context_t *ogs_core(void);
 
