@@ -55,6 +55,7 @@
 #include "core/ogs-hash.h"
 #include "core/ogs-misc.h"
 #include "core/ogs-getopt.h"
+#include "core/ogs-3gpp-types.h"
 
 #undef OGS_CORE_INSIDE
 

@@ -30,7 +30,8 @@ libogscore_1_0_la_SOURCES = \
 	ogs-sockaddr.c ogs-socket.c ogs-sockpair.c ogs-socknode.c \
 	ogs-udp.c ogs-tcp.c \
 	ogs-queue.c ogs-select.c ogs-poll.c ogs-notify.c \
-	ogs-tlv.c ogs-env.c ogs-fsm.c ogs-hash.c ogs-misc.c ogs-getopt.c\
+	ogs-tlv.c ogs-env.c ogs-fsm.c ogs-hash.c ogs-misc.c ogs-getopt.c \
+	ogs-3gpp-types.c \
 	ogs-core.c abts.h abts.c \
 	$(NULL)
 
@@ -46,6 +47,7 @@ coreinclude_HEADERS = \
 	ogs-udp.h ogs-tcp.h \
 	ogs-queue.h ogs-poll.h ogs-notify.h \
 	ogs-tlv.h ogs-env.h ogs-fsm.h ogs-hash.h ogs-misc.h ogs-getopt.h \
+	ogs-3gpp-types.h \
 	abts.h \
 	$(NULL)
 
