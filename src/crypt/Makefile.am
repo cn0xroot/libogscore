@@ -49,7 +49,7 @@ AM_LDFLAGS = \
 	$(NULL)
 
 AM_CFLAGS = \
-	-DOGS_CORE_COMPILATION \
+	-DOGS_CRYPT_COMPILATION \
 	-Wall -Werror \
 	$(NULL)
 

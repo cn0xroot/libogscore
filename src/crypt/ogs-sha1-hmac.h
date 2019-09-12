@@ -17,7 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-prelude.h"
+#if !defined(OGS_CRYPT_INSIDE) && !defined(OGS_CRYPT_COMPILATION)
+#error "This header cannot be included directly."
+#endif
 
 #ifndef OGS_SHA1_HMAC_H
 #define OGS_SHA1_HMAC_H

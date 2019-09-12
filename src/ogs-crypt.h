@@ -28,6 +28,10 @@
 #include "core/ogs-errno.h"
 #include "core/ogs-log.h"
 
+#undef OGS_CORE_INSIDE
+
+#define OGS_CRYPT_INSIDE
+
 #include "crypt/ogs-sha1.h"
 #include "crypt/ogs-sha1-hmac.h"
 #include "crypt/ogs-sha2.h"
@@ -35,7 +39,7 @@
 #include "crypt/ogs-aes.h"
 #include "crypt/ogs-aes-cmac.h"
 
-#undef OGS_CORE_INSIDE
+#undef OGS_CRYPT_INSIDE
 
 #ifdef __cplusplus
 extern "C" {
