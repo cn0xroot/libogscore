@@ -17,12 +17,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-core.h"
-#include "ogs-poll-private.h"
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#if HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #if HAVE_EVENTFD
 #include <sys/eventfd.h>
 #endif
+
+#include "ogs-core.h"
+#include "ogs-poll-private.h"
 
 static void ogs_drain_pollset(short when, ogs_socket_t fd, void *data);
 
