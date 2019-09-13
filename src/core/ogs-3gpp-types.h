@@ -28,24 +28,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define OGS_S1AP_SCTP_PORT              36412
-#define OGS_GTPV2_C_UDP_PORT            2123
-#define OGS_GTPV1_U_UDP_PORT            2152
-#define OGS_SGSAP_SCTP_PORT             29118
-
-#define OGS_SCTP_S1AP_PPID              18
-#define OGS_SCTP_X2AP_PPID              27
-#define OGS_SCTP_SGSAP_PPID             0
-
 #define OGS_MAX_NUM_OF_SESS             4   /* Num of APN(Session) per UE */
-#define OGS_MAX_NUM_OF_BEARER           4   /* Num of Bearer per APN(Session) */
-#define OGS_MAX_NUM_OF_TUNNEL           3   /* Num of Tunnel per Bearer */
-#define OGS_MAX_NUM_OF_PF               16  /* Num of PacketFilter per Bearer */
-
-#define OGS_MAX_NUM_OF_HOSTNAME         16
-#define OGS_MAX_NUM_OF_PCC_RULE         8 
-#define OGS_MAX_NUM_OF_FLOW             8   /* Num of Flow per PCC Rule */
-#define OGS_MAX_NUM_OF_PACKET_FILTER    16  /* Num of PacketFilter per Bearer */
 
 #define OGS_MAX_SDU_LEN                 8192
 #define OGS_PLMN_ID_LEN                 3
@@ -60,6 +43,7 @@ extern "C" {
 #define OGS_AUTS_LEN                    14
 #define OGS_MAX_RES_LEN                 16
 
+#define OGS_MAX_NUM_OF_HOSTNAME         16
 #define OGS_MAX_APN_LEN                 100
 #define OGS_MAX_PCO_LEN                 251
 #define OGS_MAX_FILEPATH_LEN            256
@@ -241,6 +225,8 @@ typedef struct ogs_pcc_rule_s {
 #define OGS_MAX_PCC_RULE_NAME_LEN               256
     char *name;
 
+/* Num of Flow per PCC Rule */
+#define OGS_MAX_NUM_OF_FLOW                     8
     ogs_flow_t flow[OGS_MAX_NUM_OF_FLOW];
     int num_of_flow;
 
