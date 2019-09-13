@@ -17,6 +17,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#if HAVE_ARPA_INET_H
+#include <arpa/inet.h>
+#endif
+
+#if HAVE_CTYPE_H
+#include <ctype.h>
+#endif
+
+#if HAVE_IFADDRS_H
+#include <ifaddrs.h>
+#endif
+
+#if HAVE_NETDB_H
+#include <netdb.h>
+#endif
+
 #include "ogs-core.h"
 
 #undef OGS_LOG_DOMAIN

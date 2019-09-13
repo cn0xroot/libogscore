@@ -17,12 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if !defined(OGS_CORE_INSIDE) && !defined(OGS_CORE_COMPILATION)
+#error "This header cannot be included directly."
+#endif
+
 #ifndef OGS_PKBUF_H
 #define OGS_PKBUF_H
-
-#if !defined(OGS_CORE_INSIDE)
-#error "Only <ogs-core.h> can be included directly."
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,6 +72,8 @@ void ogs_pkbuf_pool_destroy(ogs_pkbuf_pool_t *pool);
 ogs_pkbuf_t *ogs_pkbuf_alloc(ogs_pkbuf_pool_t *pool, unsigned int size);
 void ogs_pkbuf_free(ogs_pkbuf_t *pkbuf);
 
+void *ogs_pkbuf_put_data(
+        ogs_pkbuf_t *pkbuf, const void *data, unsigned int len);
 ogs_pkbuf_t *ogs_pkbuf_copy(ogs_pkbuf_t *pkbuf);
 
 static ogs_inline int ogs_pkbuf_tailroom(const ogs_pkbuf_t *pkbuf)
@@ -100,15 +102,6 @@ static ogs_inline void *ogs_pkbuf_put(ogs_pkbuf_t *pkbuf, unsigned int len)
     if (ogs_unlikely(pkbuf->tail > pkbuf->end))
         ogs_assert_if_reached();
 
-    return tmp;
-}
-
-static ogs_inline void *ogs_pkbuf_put_data(
-        ogs_pkbuf_t *pkbuf, const void *data, unsigned int len)
-{
-    void *tmp = ogs_pkbuf_put(pkbuf, len);
-
-    memcpy(tmp, data, len);
     return tmp;
 }
 

@@ -17,6 +17,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#if HAVE_STDINT_H
+#include <stdint.h>
+#endif
+
 #include "ogs-core.h"
 #include "core/abts.h"
 

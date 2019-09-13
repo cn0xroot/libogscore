@@ -17,12 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if !defined(OGS_CORE_INSIDE) && !defined(OGS_CORE_COMPILATION)
+#error "This header cannot be included directly."
+#endif
+
 #ifndef OGS_THREAD_H
 #define OGS_THREAD_H
-
-#if !defined(OGS_CORE_INSIDE)
-#error "Only <ogs-core.h> can be included directly."
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,7 +33,6 @@ extern "C" {
  * https://github.com/mongodb/mongo-c-driver/blob/master/src/libmongoc/src/mongoc/mongoc-thread-private.h
  */
 #if !defined(_WIN32)
-#include <pthread.h>
 #define ogs_thread_mutex_t pthread_mutex_t
 #define ogs_thread_mutex_init(_n) (void)pthread_mutex_init((_n), NULL)
 #define ogs_thread_mutex_lock (void)pthread_mutex_lock
@@ -60,7 +59,7 @@ static ogs_inline int ogs_thread_cond_timedwait(
     r = pthread_cond_timedwait(cond, mutex, &to);
     if (r == 0)
         return OGS_OK; 
-    else if (r == ETIMEDOUT)
+    else if (r == OGS_ETIMEDOUT)
         return OGS_TIMEUP;
     else 
         return OGS_ERROR;

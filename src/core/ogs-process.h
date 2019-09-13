@@ -17,12 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if !defined(OGS_CORE_INSIDE) && !defined(OGS_CORE_COMPILATION)
+#error "This header cannot be included directly."
+#endif
+
 #ifndef OGS_PROCESS_H
 #define OGS_PROCESS_H
-
-#if !defined(OGS_CORE_INSIDE)
-#error "Only <ogs-core.h> can be included directly."
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -68,15 +68,6 @@ typedef struct ogs_proc_s {
 #endif
 } ogs_proc_t;
 
-#if !defined(_WIN32)
-typedef sem_t ogs_proc_mutex_t;
-#define ogs_proc_mutex_wait sem_wait
-#define ogs_proc_mutex_post sem_post
-#define ogs_proc_mutex_delete sem_close
-#else
-typedef HANDLE ogs_proc_mutex_t;
-#endif
-
 enum ogs_proc_option_e {
     // stdout and stderr are the same FILE.
     ogs_proc_option_combined_stdout_stderr = 0x1,
@@ -97,9 +88,6 @@ int ogs_proc_destroy(ogs_proc_t *const process);
 
 int ogs_proc_terminate(ogs_proc_t *const process);
 int ogs_proc_kill(ogs_proc_t *const process);
-
-ogs_proc_mutex_t *ogs_proc_mutex_create(int value);
-int ogs_proc_mutex_timedwait(ogs_proc_mutex_t *mutex, ogs_time_t timeout);
 
 #ifdef __cplusplus
 }

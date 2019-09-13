@@ -17,10 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-core.h"
-#include "ogs-poll-private.h"
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#if HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #include <sys/epoll.h>
+
+#include "ogs-core.h"
+#include "ogs-poll-private.h"
 
 static void epoll_init(ogs_pollset_t *pollset);
 static void epoll_cleanup(ogs_pollset_t *pollset);

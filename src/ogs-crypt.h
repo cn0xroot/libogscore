@@ -21,13 +21,16 @@
 #define OGS_CRYPT_H
 
 #define OGS_CORE_INSIDE
-#define OGS_CRYPT_INSIDE
 
 #include "core/ogs-compat.h"
 #include "core/ogs-macros.h"
 #include "core/ogs-abort.h"
 #include "core/ogs-errno.h"
 #include "core/ogs-log.h"
+
+#undef OGS_CORE_INSIDE
+
+#define OGS_CRYPT_INSIDE
 
 #include "crypt/ogs-sha1.h"
 #include "crypt/ogs-sha1-hmac.h"
@@ -36,11 +39,21 @@
 #include "crypt/ogs-aes.h"
 #include "crypt/ogs-aes-cmac.h"
 
+#include "crypt/milenage.h"
+#include "crypt/snow-3g.h"
+#include "crypt/zuc.h"
+#include "crypt/kasumi.h"
+
+#undef OGS_CRYPT_INSIDE
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Nothing */
+#define OGS_RAND_LEN                    16
+#define OGS_AUTN_LEN                    16
+#define OGS_AUTS_LEN                    14
+#define OGS_MAX_RES_LEN                 16
 
 #ifdef __cplusplus
 }

@@ -17,6 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#if HAVE_NET_IF_H
+#include <net/if.h>
+#endif
+
+#if HAVE_IFADDRS_H
+#include <ifaddrs.h>
+#endif
+
 #include "ogs-core.h"
 
 #undef OGS_LOG_DOMAIN

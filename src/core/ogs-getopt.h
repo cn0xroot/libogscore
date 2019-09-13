@@ -17,6 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if !defined(OGS_CORE_INSIDE) && !defined(OGS_CORE_COMPILATION)
+#error "This header cannot be included directly."
+#endif
+
 #ifndef OGS_GETOPT_H
 #define OGS_GETOPT_H
 
@@ -27,7 +31,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif
 
 typedef struct ogs_getopt_s {
     char **argv;

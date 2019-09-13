@@ -68,6 +68,15 @@ static ogs_cluster_t *cluster_alloc(
         ogs_pkbuf_pool_t *pool, unsigned int size);
 static void cluster_free(ogs_pkbuf_pool_t *pool, ogs_cluster_t *cluster);
 
+void *ogs_pkbuf_put_data(
+        ogs_pkbuf_t *pkbuf, const void *data, unsigned int len)
+{
+    void *tmp = ogs_pkbuf_put(pkbuf, len);
+
+    memcpy(tmp, data, len);
+    return tmp;
+}
+
 void ogs_pkbuf_init(void)
 {
     ogs_pool_init(&pkbuf_pool, ogs_core()->pkbuf.pool);

@@ -17,6 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#if HAVE_SYS_PARAM_H
+#include <sys/param.h>
+#endif
+
+#if HAVE_SYS_RANDOM_H
+#include <sys/random.h>
+#endif
+
 #include "ogs-core.h"
 
 void ogs_random(void *buf, size_t buflen)

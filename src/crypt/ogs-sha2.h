@@ -17,12 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if !defined(OGS_CRYPT_INSIDE) && !defined(OGS_CRYPT_COMPILATION)
+#error "This header cannot be included directly."
+#endif
+
 #ifndef OGS_SHA2_H
 #define OGS_SHA2_H
-
-#if !defined(OGS_CRYPT_INSIDE)
-#error "Only <ogs-crypt.h> can be included directly."
-#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -55,6 +55,9 @@
 #include "core/ogs-hash.h"
 #include "core/ogs-misc.h"
 #include "core/ogs-getopt.h"
+#include "core/ogs-3gpp-types.h"
+
+#undef OGS_CORE_INSIDE
 
 #ifdef __cplusplus
 extern "C" {
@@ -93,7 +96,7 @@ typedef struct {
 } ogs_core_context_t;
 
 void ogs_core_initialize(void);
-void ogs_core_finalize(void);
+void ogs_core_terminate(void);
 
 ogs_core_context_t *ogs_core(void);
 

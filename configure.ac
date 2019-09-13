@@ -34,7 +34,7 @@ AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE([1.13 foreign subdir-objects])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-AC_CONFIG_HEADER([src/ogs-config.h])
+AC_CONFIG_HEADER([config.h])
 
 dnl Detect Host OS
 case "$host" in
@@ -79,12 +79,12 @@ AC_CHECK_HEADERS( \
     ifaddrs.h \
     netdb.h \
     pthread.h \
-    semaphore.h \
     signal.h \
     stdarg.h \
     stddef.h \
     stdio.h \
     stdint.h \
+    stdbool.h \
     stdlib.h \
     string.h \
     strings.h \
@@ -106,16 +106,12 @@ AC_CHECK_HEADERS( \
     sys/types.h \
     sys/wait.h \
     sys/uio.h \
-    stdbool.h \
 )
 
 ##########################################
 #### Checks for typedefs, structures, ####
 ####  and compiler characteristics.   ####
 ##########################################
-
-dnl Checks for endianess.
-AC_C_BIGENDIAN
 
 dnl Checks for libraries.
 AC_SEARCH_LIBS(gethostbyname, nsl)
@@ -131,7 +127,6 @@ AC_CHECK_FUNCS(\
     getifaddrs \
     getenv putenv setenv unsetenv \
     eventfd \
-    sem_timedwait \
 )
 
 AC_DECL_SYS_SIGLIST

@@ -17,6 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "ogs-core.h"
 
 char *ogs_strerror(ogs_err_t err, char *buf, size_t size)

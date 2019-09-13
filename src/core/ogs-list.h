@@ -17,12 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if !defined(OGS_CORE_INSIDE) && !defined(OGS_CORE_COMPILATION)
+#error "This header cannot be included directly."
+#endif
+
 #ifndef OGS_LIST_H
 #define OGS_LIST_H
-
-#if !defined(OGS_CORE_INSIDE)
-#error "Only <ogs-core.h> can be included directly."
-#endif
 
 #ifdef __cplusplus
 extern "C" {

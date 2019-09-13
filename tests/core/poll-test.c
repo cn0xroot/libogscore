@@ -25,6 +25,10 @@
 #define PORT 7777
 #define NUM 100
 
+#ifndef AI_PASSIVE
+#define AI_PASSIVE 1
+#endif
+
 static int test1_called = 0;
 
 static void test1_handler(short when, ogs_socket_t fd, void *data)
