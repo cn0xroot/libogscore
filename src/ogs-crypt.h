@@ -39,6 +39,11 @@
 #include "crypt/ogs-aes.h"
 #include "crypt/ogs-aes-cmac.h"
 
+#include "crypt/milenage.h"
+#include "crypt/snow-3g.h"
+#include "crypt/zuc.h"
+#include "crypt/kasumi.h"
+
 #undef OGS_CRYPT_INSIDE
 
 #ifdef __cplusplus
