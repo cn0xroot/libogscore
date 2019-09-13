@@ -45,7 +45,10 @@
 extern "C" {
 #endif
 
-/* Nothing */
+#define OGS_RAND_LEN                    16
+#define OGS_AUTN_LEN                    16
+#define OGS_AUTS_LEN                    14
+#define OGS_MAX_RES_LEN                 16
 
 #ifdef __cplusplus
 }

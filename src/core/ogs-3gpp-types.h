@@ -38,18 +38,10 @@ extern "C" {
 #define OGS_MAX_IMSI_LEN                \
     OGS_BCD_TO_BUFFER_LEN(OGS_MAX_IMSI_BCD_LEN)
 
-#define OGS_RAND_LEN                    16
-#define OGS_AUTN_LEN                    16
-#define OGS_AUTS_LEN                    14
-#define OGS_MAX_RES_LEN                 16
-
 #define OGS_MAX_NUM_OF_HOSTNAME         16
 #define OGS_MAX_APN_LEN                 100
 #define OGS_MAX_PCO_LEN                 251
-#define OGS_MAX_FILEPATH_LEN            256
 #define OGS_MAX_FQDN_LEN                256
-
-#define OGS_ARG_MAX                     256
 
 #define OGS_NEXT_ID(__id, __min, __max) \
     ((__id) = ((__id) == (__max) ? (__min) : ((__id) + 1)))
