@@ -29,6 +29,7 @@
 #include <sys/random.h>
 #endif
 
+<<<<<<< HEAD
 #if HAVE_FCNTL_H
 #include <fcntl.h>
 #endif
@@ -37,6 +38,8 @@
 #include <unistd.h>
 #endif
 
+=======
+>>>>>>> newlib
 #include "ogs-core.h"
 
 void ogs_random(void *buf, size_t buflen)
